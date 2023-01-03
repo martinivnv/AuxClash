@@ -1,12 +1,14 @@
 import "./App.css";
 import Answer from "./pages/players/answer/Answer";
-import PlaySubmission from "./pages/host/playSubmissions/PlaySubmission";
+import PlaySubmissions from "./pages/host/playSubmissions/PlaySubmissions";
 import Prompt from "./pages/host/prompt/Prompt";
 
 function App() {
 	return (
 		<div className="App">
-			<Answer />
+			<PlaySubmissions
+				submittedSongs={["NxxjLD2pmlk", "A__cH65WRvE", "HGorCGszxZU"]}
+			/>
 		</div>
 	);
 }
