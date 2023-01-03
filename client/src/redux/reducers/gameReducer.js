@@ -1,7 +1,7 @@
 import { START_GAME, END_GAME, ADD_PLAYER, UPDATE_PLAYER } from "../types";
 
 const initialState = {
-	gameCode: localStorage.getItem("gameCode"),
+	lobbyCode: localStorage.getItem("lobbyCode"),
 	players: [],
 	/*
 	**Player Schema**
@@ -19,10 +19,10 @@ export default function gameReducer(state = initialState, action) {
 
 	switch (type) {
 		case START_GAME:
-			localStorage.setItem("gameCode");
+			localStorage.setItem("lobbyCode");
 			return initialState;
 		case END_GAME:
-			localStorage.removeItem("gameCode");
+			localStorage.removeItem("lobbyCode");
 			return initialState;
 		case ADD_PLAYER:
 			return {
