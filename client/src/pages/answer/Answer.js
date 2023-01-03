@@ -11,7 +11,7 @@ const Answer = () => {
 		searchYoutube(query);
 	};
 
-	async function searchYoutube(query) {
+	const searchYoutube = async (query) => {
 		try {
 			const response = await axios.get(
 				"https://youtube.googleapis.com/youtube/v3/search",
@@ -28,7 +28,7 @@ const Answer = () => {
 		} catch (error) {
 			console.error(error);
 		}
-	}
+	};
 
 	return (
 		<div>
