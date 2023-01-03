@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CountdownTimer from "../../shared/CountdownTimer";
+import CountdownTimer from "../../../shared/CountdownTimer";
 
 const TopBar = () => {
 	const [isCountdownDone, setIsCountdownDone] = useState(false);
