@@ -6,7 +6,7 @@ import Prompt from "./pages/prompt/Prompt";
 function App() {
 	return (
 		<div className="App">
-			<PlaySubmission songId={"u5CVsCnxyXg"} />
+			<Prompt />
 		</div>
 	);
 }
