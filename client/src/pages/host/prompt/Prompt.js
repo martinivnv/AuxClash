@@ -1,12 +1,23 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Players from "./Players";
 import Question from "./Question";
 import TopBar from "./TopBar";
 
 const Prompt = () => {
+	const navigate = useNavigate();
+
+	const onCountdownComplete = () => {
+		navigate("/play-submissions", {
+			state: { submittedSongs: ["NxxjLD2pmlk", "A__cH65WRvE", "HGorCGszxZU"] },
+		});
+	};
+
 	return (
 		<div className="flex h-screen flex-col">
 			<div className="basis-1/12">
-				<TopBar />
+				<TopBar seconds={20} onCountdownComplete={onCountdownComplete} />
 			</div>
 
 			<div className="basis-11/12">

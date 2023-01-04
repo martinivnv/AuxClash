@@ -1,14 +1,7 @@
 import { useState } from "react";
 import CountdownTimer from "../../../shared/CountdownTimer";
 
-const TopBar = () => {
-	const [isCountdownDone, setIsCountdownDone] = useState(false);
-	const [seconds, setSeconds] = useState(90);
-
-	const onCountdownComplete = () => {
-		setIsCountdownDone(true);
-	};
-
+const TopBar = ({ seconds, onCountdownComplete }) => {
 	return (
 		<div className="flex min-h-full flex-row items-center justify-between text-center">
 			<div className="basis-1/6">

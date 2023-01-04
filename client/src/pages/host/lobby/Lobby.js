@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Lobby = () => {
 	const lobbyCode = "XXXXXX";
 
@@ -7,7 +9,7 @@ const Lobby = () => {
 				<h3>Head to auxwar.com and enter the code below to join:</h3>
 				<p>{lobbyCode}</p>
 				<br />
-				<button>Begin the Game</button>
+				<Link to="/prompt">Begin the Game</Link>
 			</div>
 			<div>
 				<h3>Aux Warriors:</h3>

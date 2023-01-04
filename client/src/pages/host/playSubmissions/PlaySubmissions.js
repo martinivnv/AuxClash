@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import YouTube from "react-youtube";
+import { useLocation } from "react-router";
 
-const PlaySubmission = ({ submittedSongs }) => {
+const PlaySubmission = () => {
+	const location = useLocation();
+	const submittedSongs = location.state.submittedSongs;
 	const [showVideo, setShowVideo] = useState(false);
 	const [queueFinished, setQueueFinished] = useState(false);
 	const [currentSong, setCurrentSong] = useState(0);
@@ -23,7 +26,6 @@ const PlaySubmission = ({ submittedSongs }) => {
 	};
 
 	const playNext = () => {
-		console.log(currentSong);
 		if (!showVideo) {
 			setShowVideo(true);
 		}
@@ -31,6 +33,7 @@ const PlaySubmission = ({ submittedSongs }) => {
 			videoTarget.loadVideoById(submittedSongs[currentSong], 0);
 		} else {
 			setQueueFinished(true);
+			setShowVideo(false);
 		}
 		setCurrentSong((currentSong) => currentSong + 1);
 	};
