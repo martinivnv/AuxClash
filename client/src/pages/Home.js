@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
 	const [code, setCode] = useState("");
+	const [nickname, setNickname] = useState("");
 
 	return (
 		<div>
@@ -10,11 +11,20 @@ const Home = () => {
 			<div>
 				<input
 					type="text"
+					placeholder="Enter your name..."
+					value={nickname}
+					onChange={(e) => setNickname(e.target.value)}
+				/>
+				<input
+					type="text"
 					placeholder="Enter Lobby Code..."
 					value={code}
 					onChange={(e) => setCode(e.target.value)}
 				/>
-				<Link to="/player/join" state={{ lobbyCode: code }}>
+				<Link
+					to="/player/game"
+					state={{ lobbyCode: code, playerName: nickname }}
+				>
 					Join a Game
 				</Link>
 				<p>Or</p>
