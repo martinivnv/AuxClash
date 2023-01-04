@@ -2,8 +2,8 @@ class LiveGames {
 	constructor() {
 		this.games = [];
 	}
-	addGame(pin, hostId, gameLive, gameData) {
-		var game = { pin, hostId, gameLive, gameData };
+	addGame(lobbyCode, hostId, gameLive, players, gameData) {
+		var game = { lobbyCode, hostId, gameLive, players, gameData };
 		this.games.push(game);
 		return game;
 	}
@@ -15,8 +15,11 @@ class LiveGames {
 		}
 		return game;
 	}
-	getGame(hostId) {
+	getGameByHostId(hostId) {
 		return this.games.filter((game) => game.hostId === hostId)[0];
+	}
+	getGameByLobbyCode(lobbyCode) {
+		return this.games.find((game) => game.lobbyCode === lobbyCode);
 	}
 }
 

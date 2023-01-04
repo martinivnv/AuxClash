@@ -47,7 +47,7 @@ const initialState = {
 //   );
 
 export const gameSlice = createSlice({
-	name: "auth",
+	name: "game",
 	initialState,
 	// extraReducers: (builder) => {
 	//   builder

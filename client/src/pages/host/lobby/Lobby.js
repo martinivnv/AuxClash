@@ -9,9 +9,7 @@ const Lobby = () => {
 	const [lobbyCode, setLobbyCode] = useState("...");
 
 	useEffect(() => {
-		console.log("Lobby useEffect");
 		const socket = socketIOClient("http://localhost:5000/");
-		console.log(socket);
 		socket.on("connect", () => {
 			console.log("Connected to the server");
 			// Lets server know this is a host connection
@@ -20,6 +18,12 @@ const Lobby = () => {
 
 		socket.on("show-lobby-code", (data) => {
 			setLobbyCode(data.lobbyCode);
+		});
+
+		socket.on("update-player-lobby", (data) => {
+			console.log("new player joined the lobby");
+			console.log(data);
+			setPlayers(data);
 		});
 
 		socket.on("disconnect", () => {
