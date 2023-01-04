@@ -14,11 +14,11 @@ const Home = () => {
 					value={code}
 					onChange={(e) => setCode(e.target.value)}
 				/>
-				<Link to="/join" state={{ lobbyCode: code }}>
+				<Link to="/player/join" state={{ lobbyCode: code }}>
 					Join a Game
 				</Link>
 				<p>Or</p>
-				<Link to="/lobby">Start a Game</Link>
+				<Link to="/host/lobby">Start a Game</Link>
 			</div>
 		</div>
 	);

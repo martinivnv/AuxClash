@@ -9,7 +9,7 @@ const Lobby = () => {
 				<h3>Head to auxwar.com and enter the code below to join:</h3>
 				<p>{lobbyCode}</p>
 				<br />
-				<Link to="/prompt">Begin the Game</Link>
+				<Link to="/host/game">Begin the Game</Link>
 			</div>
 			<div>
 				<h3>Aux Warriors:</h3>

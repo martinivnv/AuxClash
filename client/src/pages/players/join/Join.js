@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 const Join = () => {
@@ -14,7 +13,7 @@ const Join = () => {
 				value={nickname}
 				onChange={(e) => setNickname(e.target.value)}
 			/>
-			<Link to="/wait">Join Game</Link>
+			<Link to="/player/game">Join Game</Link>
 		</div>
 	);
 };

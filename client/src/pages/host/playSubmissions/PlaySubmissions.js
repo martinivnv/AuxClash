@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import YouTube from "react-youtube";
 import { useLocation } from "react-router";
 
-const PlaySubmission = () => {
+const PlaySubmissions = () => {
 	const location = useLocation();
 	const submittedSongs = location.state.submittedSongs;
 	const [showVideo, setShowVideo] = useState(false);
@@ -54,4 +54,4 @@ const PlaySubmission = () => {
 	);
 };
 
-export default PlaySubmission;
+export default PlaySubmissions;
