@@ -21,8 +21,6 @@ const Lobby = () => {
 		});
 
 		socket.on("update-player-lobby", (data) => {
-			console.log("new player joined the lobby");
-			console.log(data);
 			setPlayers(data);
 		});
 

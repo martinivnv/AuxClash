@@ -27,6 +27,10 @@ const PlayerGame = () => {
 			navigate("/");
 		});
 
+		socket.on("host-disconnect", () => {
+			navigate("/");
+		});
+
 		socket.on("disconnect", () => {
 			console.log("Disconnected from the server");
 		});

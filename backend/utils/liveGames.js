@@ -2,13 +2,17 @@ class LiveGames {
 	constructor() {
 		this.games = [];
 	}
-	addGame(lobbyCode, hostId, gameLive, players, gameData) {
-		var game = { lobbyCode, hostId, gameLive, players, gameData };
+	addGame(lobbyCode, hostId, gameLive, gameData) {
+		var game = { lobbyCode, hostId, gameLive, gameData };
+		// gameData: {
+		//  stage: 0,
+		// 	round: 0,
+		// }
 		this.games.push(game);
 		return game;
 	}
 	removeGame(hostId) {
-		var game = this.getGame(hostId);
+		var game = this.getGameByHostId(hostId);
 
 		if (game) {
 			this.games = this.games.filter((game) => game.hostId !== hostId);
@@ -16,11 +20,12 @@ class LiveGames {
 		return game;
 	}
 	getGameByHostId(hostId) {
-		return this.games.filter((game) => game.hostId === hostId)[0];
+		return this.games.find((game) => game.hostId === hostId);
 	}
 	getGameByLobbyCode(lobbyCode) {
 		return this.games.find((game) => game.lobbyCode === lobbyCode);
 	}
+	addPlayer;
 }
 
 module.exports = { LiveGames };

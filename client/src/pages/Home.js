@@ -23,7 +23,7 @@ const Home = () => {
 				/>
 				<Link
 					to="/player/game"
-					state={{ lobbyCode: code, playerName: playerName }}
+					state={{ lobbyCode: code.toUpperCase(), playerName: playerName }}
 				>
 					Join a Game
 				</Link>

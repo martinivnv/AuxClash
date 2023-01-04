@@ -22,7 +22,7 @@ const io = socketIO(server, {
 
 // Initialize classes
 var liveGames = new LiveGames();
-var players = new Players();
+var livePlayers = new Players();
 
 // // MongoDB setup
 // const uri = process.env.ATLAS_URI;
@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
 			lobbyCode += characters.charAt(Math.floor(Math.random() * 26));
 		}
 
-		liveGames.addGame(lobbyCode, socket.id, false, [], {
+		liveGames.addGame(lobbyCode, socket.id, false, {
 			stage: 0,
 			round: 0,
 		});
@@ -69,62 +69,56 @@ io.on("connection", (socket) => {
 		if (typeof matchingGame !== "undefined") {
 			var hostId = matchingGame.hostId; //Get the id of the host of game
 
-			players.addPlayer(hostId, socket.id, playerName, {
+			livePlayers.addPlayer(hostId, socket.id, playerName, {
 				score: 0,
-				answer: 0,
+				submissions: [[]],
 			}); //add player to game
 
 			socket.join(lobbyCode); //Player is joining room based on lobby code
 
-			matchingGame.players.push({
-				playerName: playerName,
-				playerId: socket.id,
-			}); // Add player to the game's player list
+			let updatedPlayers = livePlayers.getPlayers(hostId);
 
-			io.to(lobbyCode).emit("update-player-lobby", matchingGame.players); //Sending host player data to display
+			io.to(lobbyCode).emit("update-player-lobby", updatedPlayers); //Sending host player data to display
 		} else {
 			// No game has been found
 			socket.emit("no-game-found");
 		}
 	});
 
-	//When a host or player leaves the site
-	// socket.on("disconnect", () => {
-	// 	var game = games.getGame(socket.id); //Finding game with socket.id
-	// 	//If a game hosted by that id is found, the socket disconnected is a host
-	// 	if (game) {
-	// 		//Checking to see if host was disconnected or was sent to game view
-	// 		if (game.gameLive == false) {
-	// 			games.removeGame(socket.id); //Remove the game from games class
-	// 			console.log("Game ended with pin:", game.pin);
+	// When a host or player leaves the site
+	socket.on("disconnect", () => {
+		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
+		//If a game hosted by that id is found, the socket disconnected is a host
+		if (game) {
+			//Checking to see if host was disconnected or was sent to game view
+			if (game.gameLive == false) {
+				liveGames.removeGame(socket.id); //Remove the game from games class
+				console.log("Game ended with code:", game.lobbyCode);
 
-	// 			var playersToRemove = players.getPlayers(game.hostId); //Getting all players in the game
+				let playersToRemove = livePlayers.getPlayers(game.lobbyCode); //Getting all players in the game
 
-	// 			//For each player in the game
-	// 			for (var i = 0; i < playersToRemove.length; i++) {
-	// 				players.removePlayer(playersToRemove[i].playerId); //Removing each player from player class
-	// 			}
+				playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
 
-	// 			io.to(game.pin).emit("hostDisconnect"); //Send player back to 'join' screen
-	// 			socket.leave(game.pin); //Socket is leaving room
-	// 		}
-	// 	} else {
-	// 		//No game has been found, so it is a player socket that has disconnected
-	// 		var player = players.getPlayer(socket.id); //Getting player with socket.id
-	// 		//If a player has been found with that id
-	// 		if (player) {
-	// 			var hostId = player.hostId; //Gets id of host of the game
-	// 			var game = games.getGame(hostId); //Gets game data with hostId
-	// 			var pin = game.pin; //Gets the pin of the game
+				io.to(game.lobbyCode).emit("host-disconnect"); //Send player back to 'join' screen
+				socket.leave(game.lobbyCode); //Socket is leaving room
+			}
+		} else {
+			//No game has been found, so it is a player socket that has disconnected
+			let player = livePlayers.getPlayer(socket.id); //Getting player with socket.id
+			//If a player has been found with that id
+			if (player) {
+				let hostId = player.hostId; //Gets id of host of the game
+				game = liveGames.getGameByHostId(hostId); //Gets game data with hostId
+				let lobbyCode = game.lobbyCode; //Gets the lobby code of the game
 
-	// 			if (game.gameLive == false) {
-	// 				players.removePlayer(socket.id); //Removes player from players class
-	// 				var playersInGame = players.getPlayers(hostId); //Gets remaining players in game
+				if (game.gameLive == false) {
+					livePlayers.removePlayer(socket.id); //Removes player from players class
+					let playersInGame = livePlayers.getPlayers(lobbyCode);
 
-	// 				io.to(pin).emit("updatePlayerLobby", playersInGame); //Sends data to host to update screen
-	// 				socket.leave(pin); //Player is leaving the room
-	// 			}
-	// 		}
-	// 	}
-	// });
+					io.to(lobbyCode).emit("update-player-lobby", playersInGame); //Sends data to host to update screen
+					socket.leave(lobbyCode); //Player is leaving the room
+				}
+			}
+		}
+	});
 });
