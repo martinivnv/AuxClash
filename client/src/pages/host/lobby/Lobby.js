@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 
+import PlayerList from "./PlayerList";
+
 const Lobby = () => {
-	const lobbyCode = "XXXXXX";
+	const [players, setPlayers] = useState(["player1", "player2"]);
+	const [lobbyCode, setLobbyCode] = useState("...");
 
 	useEffect(() => {
 		console.log("Lobby useEffect");
@@ -13,6 +16,10 @@ const Lobby = () => {
 			console.log("Connected to the server");
 			// Lets server know this is a host connection
 			socket.emit("host-join", "Host joined!");
+		});
+
+		socket.on("show-lobby-code", (data) => {
+			setLobbyCode(data.lobbyCode);
 		});
 
 		socket.on("disconnect", () => {
@@ -34,7 +41,7 @@ const Lobby = () => {
 			</div>
 			<div>
 				<h3>Aux Warriors:</h3>
-				<p>Player list</p>
+				<PlayerList players={players} />
 			</div>
 		</div>
 	);

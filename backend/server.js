@@ -9,12 +9,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const socketIO = require("socket.io");
 
-// Boilerplate setup
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
-
-console.log(process.env.PORT);
-console.log(process.env.CORS_ORIGIN);
-
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 5000;
@@ -48,7 +43,22 @@ server.listen(port, () => {
 // When connection is made from client
 io.on("connection", (socket) => {
 	// When host connects to the server
-	socket.on("host-joins", (data) => {
+	socket.on("host-join", (data) => {
+		console.log(data);
+		// Generate lobby code
+		const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		let lobbyCode = "";
+		for (var i = 0; i < 6; i++) {
+			lobbyCode += characters.charAt(Math.floor(Math.random() * 26));
+		}
+
+		socket.join(lobbyCode);
+
+		socket.emit("show-lobby-code", { lobbyCode: lobbyCode });
+	});
+
+	// When player joins game
+	socket.on("player-join", (data) => {
 		console.log(data);
 	});
 });
