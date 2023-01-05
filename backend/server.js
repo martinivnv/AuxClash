@@ -116,10 +116,7 @@ io.on("connection", (socket) => {
 		if (typeof matchingGame !== "undefined") {
 			var hostId = matchingGame.hostId; //Get the id of the host of game
 
-			livePlayers.addPlayer(hostId, socket.id, playerName, {
-				score: 0,
-				submissions: [[]],
-			}); //add player to game
+			livePlayers.addPlayer(hostId, socket.id, playerName, 0); //add player to game
 
 			socket.join(lobbyCode); //Player is joining room based on lobby code
 
@@ -196,12 +193,16 @@ io.on("connection", (socket) => {
 		}
 	);
 
-	socket.on("vote-submitted", ({ playerId, votedSongId, hostId }) => {
-		io.to(hostId).emit("update-host-on-vote", {
-			playerId: playerId,
-			votedSongId: votedSongId,
-		});
-	});
+	socket.on(
+		"vote-submitted",
+		({ playerId, votedSongId, hostId, votedSongTitle }) => {
+			io.to(hostId).emit("update-host-on-vote", {
+				playerId: playerId,
+				votedSongId: votedSongId,
+				votedSongTitle: votedSongTitle,
+			});
+		}
+	);
 
 	console.log(livePlayers);
 	console.log(liveGames);

@@ -67,9 +67,10 @@ const PlayerGame = () => {
 		});
 	};
 
-	const onVoteSubmitted = (votedSongId) => {
+	const onVoteSubmitted = (votedSongId, votedSongTitle) => {
 		currentSocket.emit("vote-submitted", {
 			playerId: currentSocket.id,
+			votedSongTitle: votedSongTitle,
 			votedSongId: votedSongId,
 			hostId: hostId,
 		});

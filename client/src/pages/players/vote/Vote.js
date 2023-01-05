@@ -7,8 +7,8 @@ const VoteButton = ({ songTitle, onClickFunction }) => {
 const Vote = ({ submissions, onVoteSubmitted }) => {
 	const [voteSubmitted, setVoteSubmitted] = useState(false);
 
-	const onClickFunction = (songId) => {
-		onVoteSubmitted(songId);
+	const onClickFunction = (songId, songTitle) => {
+		onVoteSubmitted(songId, songTitle);
 		setVoteSubmitted(true);
 	};
 
@@ -21,7 +21,7 @@ const Vote = ({ submissions, onVoteSubmitted }) => {
 						<li key={s.songId}>
 							<VoteButton
 								songTitle={s.songTitle}
-								onClickFunction={() => onClickFunction(s.songId)}
+								onClickFunction={() => onClickFunction(s.songId, s.songTitle)}
 							/>
 						</li>
 					))}

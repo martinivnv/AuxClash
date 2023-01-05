@@ -28,13 +28,11 @@ const HostGame = () => {
 
 		socket.on("game-questions", async (data) => {
 			await setQuestions(data);
-			console.log("questions received");
 			setRound(1);
 		});
 
 		socket.on("update-host-on-connected-players", (connectedPlayers) => {
 			setPlayers(connectedPlayers);
-			console.log(connectedPlayers);
 		});
 
 		socket.on("no-game-found", () => {
@@ -47,7 +45,6 @@ const HostGame = () => {
 
 		socket.on("update-host-on-vote", (vote) => {
 			setVotes((oldVotes) => [...oldVotes, vote]);
-			console.log(votes);
 		});
 
 		socket.on("disconnect", () => {
@@ -69,12 +66,20 @@ const HostGame = () => {
 	}, [gameStage]);
 
 	useEffect(() => {
-		console.log(submissions);
+		newRound();
+	}, [round]);
+
+	useEffect(() => {
+		if (submissions.length === players.length && players.length > 0) {
+			stageReducer("SubmissionsDone");
+		}
 	}, [submissions]);
 
 	useEffect(() => {
-		newRound();
-	}, [round]);
+		if (votes.length === players.length && players.length > 0) {
+			stageReducer("VotingDone");
+		}
+	}, [votes]);
 
 	const newRound = () => {
 		console.log(`new round: ${round}`);
@@ -95,6 +100,14 @@ const HostGame = () => {
 		switch (action) {
 			case "NewRound":
 				setGameStage(1);
+				break;
+			case "SubmissionsDone":
+				setGameStage(2);
+				currentSocket.emit("all-combined-submissions", {
+					submissions: submissions,
+					lobbyCode: lobbyCode,
+					hostId: currentSocket.id,
+				});
 				break;
 			case "PromptCountdownComplete":
 				setGameStage(2);
@@ -140,7 +153,9 @@ const HostGame = () => {
 				/>
 			)}
 			{gameStage === 3 && <WaitForVotes />}
-			{gameStage === 4 && <Scoreboard />}
+			{gameStage === 4 && (
+				<Scoreboard votes={votes} players={players} submissions={submissions} />
+			)}
 		</div>
 	);
 };
