@@ -88,6 +88,13 @@ const HostGame = () => {
 		setVotes([]);
 	};
 
+	// TEMPORARY, REMOVE LATER ===============================
+	useEffect(() => {
+		console.log("players updated in hostGame");
+		console.log(players);
+	}, [players]);
+	// TEMPORARY, REMOVE LATER ===============================
+
 	const stageReducer = (action) => {
 		/*
 			0 - Loading
@@ -123,6 +130,14 @@ const HostGame = () => {
 			case "VotingDone":
 				setGameStage(4);
 				break;
+			case "EndRound":
+				// If current round is same as number of questions, game over
+				if (round === questions.length) {
+					setGameStage(5);
+				} else {
+					setRound((currentRound) => currentRound + 1);
+				}
+				break;
 			default:
 				break;
 		}
@@ -134,6 +149,10 @@ const HostGame = () => {
 
 	const onQueueFinished = () => {
 		stageReducer("AllSubmissionsPlayed");
+	};
+
+	const onEndRound = () => {
+		stageReducer("EndRound");
 	};
 
 	return (
@@ -159,6 +178,7 @@ const HostGame = () => {
 					players={players}
 					submissions={submissions}
 					setPlayers={setPlayers}
+					onEndRound={onEndRound}
 				/>
 			)}
 		</div>

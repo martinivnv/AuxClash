@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 
-const Scoreboard = ({ votes, players, submissions, setPlayers }) => {
+const Scoreboard = ({
+	votes,
+	players,
+	submissions,
+	setPlayers,
+	onEndRound,
+}) => {
 	const [scores, setScores] = useState({});
 	const [consolidatedVotes, setConsolidatedVotes] = useState([]);
 
 	useEffect(() => {
 		const votesPerSong = countVotes();
 		setConsolidatedVotes(mapVotesToSongsAndPlayers(votesPerSong));
-		updatePlayerScores();
 	}, []);
+
+	useEffect(() => {
+		console.log("scores");
+		console.log(scores);
+		updatePlayerScores();
+	}, [scores]);
 
 	const countVotes = () => {
 		return votes.reduce(
@@ -40,22 +51,26 @@ const Scoreboard = ({ votes, players, submissions, setPlayers }) => {
 	};
 
 	const updatePlayerScores = () => {
-		const updatedPlayers = players.map((p) => p.score === scores[p.playerId]);
+		const updatedPlayers = players.map((p) => {
+			return { ...p, score: scores[p.playerId] };
+		});
+		console.log("updated players");
+		console.log(updatedPlayers);
 		setPlayers(updatedPlayers);
 	};
 
-	// const mapVotesToPlayers = (votes, players) => {
-
-	// }
-
 	return (
-		<ul>
-			{consolidatedVotes.map((s) => (
-				<li
-					key={s.songId}
-				>{`${s.songTitle} --- ${s.numVotes} --- ${s.playerName} --- ${s.playerScore}`}</li>
-			))}
-		</ul>
+		<div>
+			<h2>Scoreboard</h2>
+			<ul>
+				{consolidatedVotes.map((s) => (
+					<li
+						key={s.songId}
+					>{`${s.songTitle} --- ${s.numVotes} --- ${s.playerName} --- ${s.playerScore}`}</li>
+				))}
+			</ul>
+			<button onClick={onEndRound}>End Round</button>
+		</div>
 	);
 };
 
