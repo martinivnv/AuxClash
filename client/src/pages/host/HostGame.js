@@ -154,7 +154,12 @@ const HostGame = () => {
 			)}
 			{gameStage === 3 && <WaitForVotes />}
 			{gameStage === 4 && (
-				<Scoreboard votes={votes} players={players} submissions={submissions} />
+				<Scoreboard
+					votes={votes}
+					players={players}
+					submissions={submissions}
+					setPlayers={setPlayers}
+				/>
 			)}
 		</div>
 	);

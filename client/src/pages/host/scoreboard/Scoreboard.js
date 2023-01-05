@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-const Scoreboard = ({ votes, players, submissions }) => {
-	const [scores, setScores] = useState([]);
-	const [votesPerSong, setVotesPerSong] = useState([]);
+const Scoreboard = ({ votes, players, submissions, setPlayers }) => {
+	const [scores, setScores] = useState({});
+	const [consolidatedVotes, setConsolidatedVotes] = useState([]);
 
 	useEffect(() => {
-		const talliedVotes = countVotes();
-		setVotesPerSong(mapVotesToSongs(talliedVotes));
+		const votesPerSong = countVotes();
+		setConsolidatedVotes(mapVotesToSongsAndPlayers(votesPerSong));
+		updatePlayerScores();
 	}, []);
 
 	const countVotes = () => {
@@ -18,15 +19,29 @@ const Scoreboard = ({ votes, players, submissions }) => {
 		);
 	};
 
-	const mapVotesToSongs = (talliedVotes) => {
-		return submissions.map((s) => {
+	const mapVotesToSongsAndPlayers = (votesPerSong) => {
+		let newScores = {};
+		const parsedVotes = submissions.map((s) => {
+			const matchingPlayer = players.find((p) => p.playerId === s.playerId);
+			const numVotes = votesPerSong[s.songId] || 0;
+			const newScore = matchingPlayer.score + 1200 * numVotes;
+			newScores[s.playerId] = newScore;
 			return {
 				songTitle: s.songTitle,
 				songId: s.songId,
-				numVotes: talliedVotes[s.songId] || 0,
+				numVotes: numVotes,
 				playerId: s.playerId,
+				playerName: matchingPlayer.playerName,
+				playerScore: newScore,
 			};
 		});
+		setScores(newScores);
+		return parsedVotes;
+	};
+
+	const updatePlayerScores = () => {
+		const updatedPlayers = players.map((p) => p.score === scores[p.playerId]);
+		setPlayers(updatedPlayers);
 	};
 
 	// const mapVotesToPlayers = (votes, players) => {
@@ -35,8 +50,10 @@ const Scoreboard = ({ votes, players, submissions }) => {
 
 	return (
 		<ul>
-			{votesPerSong.map((song) => (
-				<li key={song.songId}>{`${song.songTitle} ----- ${song.numVotes}`}</li>
+			{consolidatedVotes.map((s) => (
+				<li
+					key={s.songId}
+				>{`${s.songTitle} --- ${s.numVotes} --- ${s.playerName} --- ${s.playerScore}`}</li>
 			))}
 		</ul>
 	);
