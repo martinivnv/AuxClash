@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Searchbar from "./Searchbar";
 import axios from "axios";
 
@@ -9,6 +9,15 @@ const Answer = ({ onAnswerSubmitted }) => {
 		e.preventDefault();
 		searchYoutube(query);
 	};
+
+	useEffect(() => {
+		if (song !== null) {
+			onAnswerSubmitted({
+				songTitle: song.snippet.title,
+				songId: song.id.videoId,
+			});
+		}
+	}, [song]);
 
 	const searchYoutube = async (query) => {
 		try {
@@ -24,10 +33,6 @@ const Answer = ({ onAnswerSubmitted }) => {
 				}
 			);
 			setSong(response.data.items[0]);
-			onAnswerSubmitted({
-				songTitle: song.snippet.title,
-				songId: song.id.videoId,
-			});
 		} catch (error) {
 			console.error(error);
 		}
