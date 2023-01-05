@@ -5,14 +5,13 @@ import Players from "./Players";
 import Question from "./Question";
 import TopBar from "./TopBar";
 
-const Prompt = () => {
-	const navigate = useNavigate();
-
-	const onCountdownComplete = () => {
-		navigate("/play-submissions", {
-			state: { submittedSongs: ["NxxjLD2pmlk", "A__cH65WRvE", "HGorCGszxZU"] },
-		});
-	};
+const Prompt = ({ question, onCountdownComplete }) => {
+	// const navigate = useNavigate();
+	// const onCountdownComplete = () => {
+	// 	navigate("/play-submissions", {
+	// 		state: { submittedSongs: ["NxxjLD2pmlk", "A__cH65WRvE", "HGorCGszxZU"] },
+	// 	});
+	// };
 
 	return (
 		<div className="flex h-screen flex-col">
@@ -23,7 +22,7 @@ const Prompt = () => {
 			<div className="basis-11/12">
 				<div className="flex min-h-full flex-col items-center justify-around text-center">
 					<div className="basis-3/4">
-						<Question />
+						<Question question={question} />
 					</div>
 					<div className="basis-1/4">
 						<Players />

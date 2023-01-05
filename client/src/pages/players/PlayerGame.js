@@ -13,7 +13,7 @@ const PlayerGame = () => {
 	const playerName = location.state.playerName;
 
 	useEffect(() => {
-		const socket = socketIOClient("http://localhost:5000/");
+		const socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
 		socket.on("connect", () => {
 			console.log("Connected to the server");
 			// Lets server know this is a player connection

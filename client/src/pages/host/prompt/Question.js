@@ -1,8 +1,8 @@
-const Question = () => {
+const Question = ({ question }) => {
 	return (
 		<div className="flex flex-col">
-			<div>Question</div>
-			<div>Image</div>
+			<div>{question.question}</div>
+			{question.image !== null && <div>{question.image}</div>}
 		</div>
 	);
 };

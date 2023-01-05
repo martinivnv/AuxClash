@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const socketIO = require("socket.io");
 
-require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 5000;
@@ -42,24 +42,69 @@ server.listen(port, () => {
 
 // When connection is made from client
 io.on("connection", (socket) => {
-	// When host connects to the server
-	socket.on("host-join", (data) => {
+	// When host starts a lobby
+	socket.on("host-start-lobby", (data) => {
 		console.log(data);
 		// Generate lobby code
-		const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		let lobbyCode = "";
 		for (var i = 0; i < 6; i++) {
-			lobbyCode += characters.charAt(Math.floor(Math.random() * 26));
+			lobbyCode += characters.charAt(Math.floor(Math.random() * 36));
 		}
 
 		liveGames.addGame(lobbyCode, socket.id, false, {
 			stage: 0,
 			round: 0,
+			category: null,
 		});
 
 		socket.join(lobbyCode);
 
-		socket.emit("show-lobby-code", { lobbyCode: lobbyCode });
+		socket.emit("show-lobby-code", { lobbyCode: lobbyCode, hostId: socket.id });
+	});
+
+	socket.on("host-start-game", ({ category, hostId }) => {
+		console.log("host-start-game received");
+		var game = liveGames.getGameByHostId(hostId); // Get the game based on socket.id
+		game.gameLive = true;
+		game.gameData.category = category;
+		socket.emit("game-started", game.hostId); // Tell host that game has started
+	});
+
+	// When host joins game
+	socket.on("host-join-game", ({ lobbyCode }) => {
+		console.log("host-join-game receieved");
+		var game = liveGames.getGameByLobbyCode(lobbyCode); //Gets game with old host id
+		if (game) {
+			const oldHostId = game.hostId;
+			game.hostId = socket.id; //Changes the game host id to new host id
+			socket.join(game.lobbyCode);
+			for (var i = 0; i < Object.keys(livePlayers.players).length; i++) {
+				if (livePlayers.players[i].hostId == oldHostId) {
+					livePlayers.players[i].hostId = socket.id;
+				}
+			}
+
+			socket.emit("game-questions", [
+				{
+					question: "Name a song that makes you feel like you are levitating.",
+					image: null,
+				},
+				{
+					question:
+						"Name the song you would play when going for a PR in the gym.",
+					image: null,
+				},
+				{
+					question: "Name a song that doesn't get enough love.",
+					image: null,
+				},
+			]);
+
+			io.to(game.lobbyCode).emit("gameStartedPlayer");
+		} else {
+			socket.emit("no-game-found");
+		}
 	});
 
 	// When player joins game
@@ -95,7 +140,7 @@ io.on("connection", (socket) => {
 				liveGames.removeGame(socket.id); //Remove the game from games class
 				console.log("Game ended with code:", game.lobbyCode);
 
-				let playersToRemove = livePlayers.getPlayers(socket.id); //Getting all players in the game
+				let playersToRemove = livePlayers.getPlayers(game.hostId); //Getting all players in the game
 
 				playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
 

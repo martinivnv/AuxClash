@@ -5,6 +5,7 @@ class LiveGames {
 	addGame(lobbyCode, hostId, gameLive, gameData) {
 		var game = { lobbyCode, hostId, gameLive, gameData };
 		// gameData: {
+		//  category: string,
 		//  stage: 0,
 		// 	round: 0,
 		// }
