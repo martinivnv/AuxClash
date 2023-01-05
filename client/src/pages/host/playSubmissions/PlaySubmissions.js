@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import YouTube from "react-youtube";
-import { useLocation } from "react-router";
 
-const PlaySubmissions = () => {
-	const location = useLocation();
-	const submittedSongs = location.state.submittedSongs;
+const PlaySubmissions = ({ submissions }) => {
 	const [showVideo, setShowVideo] = useState(false);
 	const [queueFinished, setQueueFinished] = useState(false);
 	const [currentSong, setCurrentSong] = useState(0);
@@ -29,8 +26,8 @@ const PlaySubmissions = () => {
 		if (!showVideo) {
 			setShowVideo(true);
 		}
-		if (currentSong < submittedSongs.length - 1) {
-			videoTarget.loadVideoById(submittedSongs[currentSong], 0);
+		if (currentSong < submissions.length - 1 || currentSong === 0) {
+			videoTarget.loadVideoById(submissions[currentSong].songId, 0);
 		} else {
 			setQueueFinished(true);
 			setShowVideo(false);
@@ -44,7 +41,7 @@ const PlaySubmissions = () => {
 			<div className="aspect-video">
 				{showVideo ? (
 					<YouTube
-						videoId={submittedSongs[currentSong]}
+						videoId={submissions[currentSong].songId}
 						opts={opts}
 						onReady={onReady}
 					/>

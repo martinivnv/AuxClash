@@ -35,7 +35,7 @@ const HostGame = () => {
 		});
 
 		socket.on("update-host-on-player-answer", (data) => {
-			setSubmissions(...submissions, data);
+			setSubmissions((oldSubmissions) => [...oldSubmissions, data]);
 		});
 
 		socket.on("disconnect", () => {
@@ -95,7 +95,7 @@ const HostGame = () => {
 					onCountdownComplete={onPromptCountdownComplete}
 				/>
 			)}
-			{gameStage === 2 && <div>Game stage 2</div>}
+			{gameStage === 2 && <PlaySubmissions submissions={submissions} />}
 		</div>
 	);
 };
