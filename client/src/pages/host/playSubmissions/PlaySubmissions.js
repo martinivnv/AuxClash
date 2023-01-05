@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import YouTube from "react-youtube";
 
-const PlaySubmissions = ({ submissions }) => {
+const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 	const [showVideo, setShowVideo] = useState(false);
 	const [queueFinished, setQueueFinished] = useState(false);
 	const [currentSong, setCurrentSong] = useState(0);
@@ -34,6 +34,12 @@ const PlaySubmissions = ({ submissions }) => {
 		}
 		setCurrentSong((currentSong) => currentSong + 1);
 	};
+
+	useEffect(() => {
+		if (queueFinished) {
+			onQueueFinished();
+		}
+	}, [queueFinished]);
 
 	return (
 		<div>

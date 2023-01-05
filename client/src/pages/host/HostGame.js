@@ -77,6 +77,9 @@ const HostGame = () => {
 			case "PromptCountdownComplete":
 				setGameStage(2);
 				break;
+			case "AllSubmissionsPlayed":
+				setGameStage(3);
+				break;
 			default:
 				break;
 		}
@@ -84,6 +87,10 @@ const HostGame = () => {
 
 	const onPromptCountdownComplete = () => {
 		stageReducer("PromptCountdownComplete");
+	};
+
+	const onQueueFinished = () => {
+		stageReducer("AllSubmissionsPlayed");
 	};
 
 	return (
@@ -95,7 +102,12 @@ const HostGame = () => {
 					onCountdownComplete={onPromptCountdownComplete}
 				/>
 			)}
-			{gameStage === 2 && <PlaySubmissions submissions={submissions} />}
+			{gameStage === 2 && (
+				<PlaySubmissions
+					submissions={submissions}
+					onQueueFinished={onQueueFinished}
+				/>
+			)}
 		</div>
 	);
 };

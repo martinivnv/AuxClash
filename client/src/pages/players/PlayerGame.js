@@ -59,8 +59,9 @@ const PlayerGame = () => {
 	return (
 		<div>
 			<div>{gameStage}</div>
-			{gameStage === 0 && <div>Waiting...</div>}
+			{gameStage === 0 && <Wait />}
 			{gameStage === 1 && <Answer onAnswerSubmitted={onAnswerSubmitted} />}
+			{gameStage === 2 && <Wait />}
 		</div>
 	);
 };
