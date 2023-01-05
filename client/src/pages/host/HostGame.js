@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import Prompt from "./prompt/Prompt";
 import PlaySubmissions from "./playSubmissions/PlaySubmissions";
 import socketIOClient from "socket.io-client";
-import { useParams, useNavigate, useLocation } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import WaitForVotes from "./waitForVotes/WaitForVotes";
+import Scoreboard from "./scoreboard/Scoreboard";
 
 const HostGame = () => {
 	const navigate = useNavigate();
 	const params = useParams();
 	const lobbyCode = params.lobbyCode;
+	const [currentSocket, setCurrentSocket] = useState(null);
 	const [players, setPlayers] = useState([]);
 	const [questions, setQuestions] = useState([{ question: "", image: null }]);
 	const [round, setRound] = useState(0);
 	const [gameStage, setGameStage] = useState(0);
 	const [submissions, setSubmissions] = useState([]);
-	const [currentSocket, setCurrentSocket] = useState(null);
 	const [votes, setVotes] = useState([]);
 
 	useEffect(() => {
@@ -29,7 +30,11 @@ const HostGame = () => {
 			await setQuestions(data);
 			console.log("questions received");
 			setRound(1);
-			stageReducer("QuestionsReceived");
+		});
+
+		socket.on("update-host-on-connected-players", (connectedPlayers) => {
+			setPlayers(connectedPlayers);
+			console.log(connectedPlayers);
 		});
 
 		socket.on("no-game-found", () => {
@@ -67,6 +72,17 @@ const HostGame = () => {
 		console.log(submissions);
 	}, [submissions]);
 
+	useEffect(() => {
+		newRound();
+	}, [round]);
+
+	const newRound = () => {
+		console.log(`new round: ${round}`);
+		stageReducer("NewRound");
+		setSubmissions([]);
+		setVotes([]);
+	};
+
 	const stageReducer = (action) => {
 		/*
 			0 - Loading
@@ -77,7 +93,7 @@ const HostGame = () => {
 			5 - Game Finished
 		*/
 		switch (action) {
-			case "QuestionsReceived":
+			case "NewRound":
 				setGameStage(1);
 				break;
 			case "PromptCountdownComplete":
@@ -90,6 +106,9 @@ const HostGame = () => {
 				break;
 			case "AllSubmissionsPlayed":
 				setGameStage(3);
+				break;
+			case "VotingDone":
+				setGameStage(4);
 				break;
 			default:
 				break;
@@ -109,7 +128,8 @@ const HostGame = () => {
 			<div>{gameStage}</div>
 			{gameStage === 1 && (
 				<Prompt
-					question={questions[round - 1]}
+					questions={questions}
+					round={round}
 					onCountdownComplete={onPromptCountdownComplete}
 				/>
 			)}
@@ -120,6 +140,7 @@ const HostGame = () => {
 				/>
 			)}
 			{gameStage === 3 && <WaitForVotes />}
+			{gameStage === 4 && <Scoreboard />}
 		</div>
 	);
 };

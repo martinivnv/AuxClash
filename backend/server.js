@@ -79,9 +79,11 @@ io.on("connection", (socket) => {
 			const oldHostId = game.hostId;
 			game.hostId = socket.id; //Changes the game host id to new host id
 			socket.join(game.lobbyCode);
+			let connectedPlayers = [];
 			for (var i = 0; i < Object.keys(livePlayers.players).length; i++) {
 				if (livePlayers.players[i].hostId == oldHostId) {
 					livePlayers.players[i].hostId = socket.id;
+					connectedPlayers.push(livePlayers.players[i]);
 				}
 			}
 
@@ -101,7 +103,7 @@ io.on("connection", (socket) => {
 				},
 			]);
 
-			io.to(game.lobbyCode).emit("gameStartedPlayer");
+			socket.emit("update-host-on-connected-players", connectedPlayers);
 		} else {
 			socket.emit("no-game-found");
 		}
