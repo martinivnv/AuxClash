@@ -3,6 +3,7 @@ import Prompt from "./prompt/Prompt";
 import PlaySubmissions from "./playSubmissions/PlaySubmissions";
 import socketIOClient from "socket.io-client";
 import { useParams, useNavigate, useLocation } from "react-router";
+import WaitForVotes from "./waitForVotes/WaitForVotes";
 
 const HostGame = () => {
 	const navigate = useNavigate();
@@ -48,7 +49,6 @@ const HostGame = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log(`Game stage set to: ${gameStage}`);
 		if (currentSocket !== null) {
 			currentSocket.emit("game-stage-change", {
 				newStage: gameStage,
@@ -76,6 +76,12 @@ const HostGame = () => {
 				break;
 			case "PromptCountdownComplete":
 				setGameStage(2);
+				console.log("seding all-combined-submissions");
+				console.log(submissions);
+				currentSocket.emit("all-combined-submissions", {
+					submissions: submissions,
+					lobbyCode: lobbyCode,
+				});
 				break;
 			case "AllSubmissionsPlayed":
 				setGameStage(3);
@@ -108,6 +114,7 @@ const HostGame = () => {
 					onQueueFinished={onQueueFinished}
 				/>
 			)}
+			{gameStage === 3 && <WaitForVotes />}
 		</div>
 	);
 };

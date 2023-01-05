@@ -184,6 +184,11 @@ io.on("connection", (socket) => {
 		}
 	);
 
+	socket.on("all-combined-submissions", ({ submissions, lobbyCode }) => {
+		console.log("receiving all-combined-submissions");
+		io.to(lobbyCode).emit("send-submissions-for-voting", submissions);
+	});
+
 	console.log(livePlayers);
 	console.log(liveGames);
 });

@@ -4,7 +4,7 @@ import YouTube from "react-youtube";
 const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 	const [showVideo, setShowVideo] = useState(false);
 	const [queueFinished, setQueueFinished] = useState(false);
-	const [currentSong, setCurrentSong] = useState(0);
+	const [currentSong, setCurrentSong] = useState(-1);
 	let videoTarget = null;
 
 	const opts = {
@@ -26,13 +26,13 @@ const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 		if (!showVideo) {
 			setShowVideo(true);
 		}
-		if (currentSong < submissions.length - 1 || currentSong === 0) {
-			videoTarget.loadVideoById(submissions[currentSong].songId, 0);
+		if (currentSong < submissions.length - 1) {
+			setCurrentSong((currentSong) => currentSong + 1);
+			// videoTarget.loadVideoById(submissions[currentSong].songId, 0);
 		} else {
 			setQueueFinished(true);
 			setShowVideo(false);
 		}
-		setCurrentSong((currentSong) => currentSong + 1);
 	};
 
 	useEffect(() => {

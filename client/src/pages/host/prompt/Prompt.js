@@ -16,7 +16,7 @@ const Prompt = ({ question, onCountdownComplete }) => {
 	return (
 		<div className="flex h-screen flex-col">
 			<div className="basis-1/12">
-				<TopBar seconds={20} onCountdownComplete={onCountdownComplete} />
+				<TopBar seconds={5} onCountdownComplete={onCountdownComplete} />
 			</div>
 
 			<div className="basis-11/12">
