@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import socketIOClient from "socket.io-client";
+import GameOver from "../host/gameover/GameOver";
 
 import Answer from "./answer/Answer";
 import Vote from "./vote/Vote";
@@ -58,6 +59,12 @@ const PlayerGame = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (gameStage === 5) {
+			currentSocket.disconnect();
+		}
+	}, [gameStage]);
+
 	const onAnswerSubmitted = (data) => {
 		currentSocket.emit("answer-submitted", {
 			playerId: currentSocket.id,
@@ -85,6 +92,8 @@ const PlayerGame = () => {
 			{gameStage === 3 && (
 				<Vote submissions={submissions} onVoteSubmitted={onVoteSubmitted} />
 			)}
+			{gameStage === 4 && <Wait />}
+			{gameStage === 5 && <GameOver />}
 		</div>
 	);
 };

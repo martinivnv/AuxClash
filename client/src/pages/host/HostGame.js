@@ -5,6 +5,7 @@ import socketIOClient from "socket.io-client";
 import { useParams, useNavigate } from "react-router";
 import WaitForVotes from "./waitForVotes/WaitForVotes";
 import Scoreboard from "./scoreboard/Scoreboard";
+import GameOver from "./gameover/GameOver";
 
 const HostGame = () => {
 	const navigate = useNavigate();
@@ -81,19 +82,19 @@ const HostGame = () => {
 		}
 	}, [votes]);
 
+	useEffect(() => {
+		if (gameStage === 5) {
+			currentSocket.emit("game-over");
+			currentSocket.disconnect();
+		}
+	}, [gameStage]);
+
 	const newRound = () => {
 		console.log(`new round: ${round}`);
 		stageReducer("NewRound");
 		setSubmissions([]);
 		setVotes([]);
 	};
-
-	// TEMPORARY, REMOVE LATER ===============================
-	useEffect(() => {
-		console.log("players updated in hostGame");
-		console.log(players);
-	}, [players]);
-	// TEMPORARY, REMOVE LATER ===============================
 
 	const stageReducer = (action) => {
 		/*
@@ -181,6 +182,7 @@ const HostGame = () => {
 					onEndRound={onEndRound}
 				/>
 			)}
+			{gameStage === 5 && <GameOver />}
 		</div>
 	);
 };

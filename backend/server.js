@@ -60,6 +60,9 @@ io.on("connection", (socket) => {
 
 		socket.join(lobbyCode);
 
+		console.log(livePlayers);
+		console.log(liveGames);
+
 		socket.emit("show-lobby-code", { lobbyCode: lobbyCode, hostId: socket.id });
 	});
 
@@ -204,6 +207,18 @@ io.on("connection", (socket) => {
 		}
 	);
 
-	console.log(livePlayers);
-	console.log(liveGames);
+	socket.on("game-over", () => {
+		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
+		//If a game hosted by that id is found, the socket disconnected is a host
+		if (game) {
+			liveGames.removeGame(socket.id); //Remove the game from games class
+			console.log("Game ended with code:", game.lobbyCode);
+
+			let playersToRemove = livePlayers.getPlayers(game.hostId); //Getting all players in the game
+
+			playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
+
+			socket.leave(game.lobbyCode); //Socket is leaving room
+		}
+	});
 });
