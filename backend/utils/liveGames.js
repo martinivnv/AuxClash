@@ -25,7 +25,6 @@ class LiveGames {
 	getGameByLobbyCode(lobbyCode) {
 		return this.games.find((game) => game.lobbyCode === lobbyCode);
 	}
-	addPlayer;
 }
 
 module.exports = { LiveGames };

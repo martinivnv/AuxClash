@@ -95,7 +95,7 @@ io.on("connection", (socket) => {
 				liveGames.removeGame(socket.id); //Remove the game from games class
 				console.log("Game ended with code:", game.lobbyCode);
 
-				let playersToRemove = livePlayers.getPlayers(game.lobbyCode); //Getting all players in the game
+				let playersToRemove = livePlayers.getPlayers(socket.id); //Getting all players in the game
 
 				playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
 
@@ -109,14 +109,16 @@ io.on("connection", (socket) => {
 			if (player) {
 				let hostId = player.hostId; //Gets id of host of the game
 				game = liveGames.getGameByHostId(hostId); //Gets game data with hostId
-				let lobbyCode = game.lobbyCode; //Gets the lobby code of the game
+				if (game) {
+					let lobbyCode = game.lobbyCode; //Gets the lobby code of the game
 
-				if (game.gameLive == false) {
-					livePlayers.removePlayer(socket.id); //Removes player from players class
-					let playersInGame = livePlayers.getPlayers(lobbyCode);
+					if (game.gameLive == false) {
+						livePlayers.removePlayer(socket.id); //Removes player from players class
+						let playersInGame = livePlayers.getPlayers(lobbyCode);
 
-					io.to(lobbyCode).emit("update-player-lobby", playersInGame); //Sends data to host to update screen
-					socket.leave(lobbyCode); //Player is leaving the room
+						io.to(lobbyCode).emit("update-player-lobby", playersInGame); //Sends data to host to update screen
+						socket.leave(lobbyCode); //Player is leaving the room
+					}
 				}
 			}
 		}
