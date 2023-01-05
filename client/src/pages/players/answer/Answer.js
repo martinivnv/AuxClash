@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import Searchbar from "./Searchbar";
 import axios from "axios";
 
-const Answer = () => {
+const Answer = ({ onAnswerSubmitted }) => {
 	const [song, setSong] = useState(null);
 
 	const onSearch = (e, query) => {
 		e.preventDefault();
-		console.log("form submitted ✅");
 		searchYoutube(query);
 	};
 
@@ -25,6 +24,10 @@ const Answer = () => {
 				}
 			);
 			setSong(response.data.items[0]);
+			onAnswerSubmitted({
+				songTitle: song.snippet.title,
+				songId: song.id.videoId,
+			});
 		} catch (error) {
 			console.error(error);
 		}

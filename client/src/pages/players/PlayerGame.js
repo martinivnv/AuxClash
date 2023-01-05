@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import socketIOClient from "socket.io-client";
 
@@ -11,9 +11,12 @@ const PlayerGame = () => {
 	const location = useLocation();
 	const lobbyCode = location.state.lobbyCode;
 	const playerName = location.state.playerName;
+	const [gameStage, setGameStage] = useState(0);
+	const [currentSocket, setCurrentSocket] = useState(null);
 
 	useEffect(() => {
 		const socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
+		setCurrentSocket(socket);
 		socket.on("connect", () => {
 			console.log("Connected to the server");
 			// Lets server know this is a player connection
@@ -21,6 +24,10 @@ const PlayerGame = () => {
 				lobbyCode: lobbyCode,
 				playerName: playerName,
 			});
+		});
+
+		socket.on("update-players-on-stage-change", (newStage) => {
+			setGameStage(newStage);
 		});
 
 		socket.on("no-game-found", () => {
@@ -40,7 +47,22 @@ const PlayerGame = () => {
 		};
 	}, []);
 
-	return <div>Player game screen</div>;
+	const onAnswerSubmitted = (data) => {
+		currentSocket.emit("answer-submitted", {
+			playerId: currentSocket.id,
+			lobbyCode: lobbyCode,
+			songTitle: data.songTitle,
+			songId: data.songId,
+		});
+	};
+
+	return (
+		<div>
+			<div>{gameStage}</div>
+			{gameStage === 0 && <div>Waiting...</div>}
+			{gameStage === 1 && <Answer onAnswerSubmitted={onAnswerSubmitted} />}
+		</div>
+	);
 };
 
 export default PlayerGame;

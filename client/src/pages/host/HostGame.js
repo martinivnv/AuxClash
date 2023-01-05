@@ -27,14 +27,17 @@ const HostGame = () => {
 			await setQuestions(data);
 			console.log("questions received");
 			setRound(1);
-			setGameStage(1);
+			stageReducer("QuestionsReceived");
 		});
 
 		socket.on("no-game-found", () => {
 			navigate("/");
 		});
 
-		//socket.on("player-submission");
+		socket.on("update-host-on-player-answer", (data) => {
+			setSubmissions(...submissions, data);
+			console.log(submissions);
+		});
 
 		socket.on("disconnect", () => {
 			console.log("Disconnected from the server");
@@ -44,6 +47,16 @@ const HostGame = () => {
 			socket.disconnect();
 		};
 	}, []);
+
+	useEffect(() => {
+		console.log(`Game stage set to: ${gameStage}`);
+		if (currentSocket !== null) {
+			currentSocket.emit("game-stage-change", {
+				newStage: gameStage,
+				lobbyCode: lobbyCode,
+			});
+		}
+	}, [gameStage]);
 
 	const stageReducer = (action) => {
 		/*
@@ -55,13 +68,15 @@ const HostGame = () => {
 			5 - Game Finished
 		*/
 		switch (action) {
+			case "QuestionsReceived":
+				setGameStage(1);
+				break;
 			case "PromptCountdownComplete":
 				setGameStage(2);
 				break;
 			default:
 				break;
 		}
-		currentSocket.emit("game-stage-change", gameStage);
 	};
 
 	const onPromptCountdownComplete = () => {
@@ -70,6 +85,7 @@ const HostGame = () => {
 
 	return (
 		<div>
+			<div>{gameStage}</div>
 			{gameStage === 1 && (
 				<Prompt
 					question={questions[round - 1]}

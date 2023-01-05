@@ -168,6 +168,22 @@ io.on("connection", (socket) => {
 			}
 		}
 	});
+
+	socket.on("game-stage-change", ({ newStage, lobbyCode }) => {
+		io.to(lobbyCode).emit("update-players-on-stage-change", newStage);
+	});
+
+	socket.on(
+		"answer-submitted",
+		({ playerId, lobbyCode, songTitle, songId }) => {
+			io.to(lobbyCode).emit("update-host-on-player-answer", {
+				playerId: playerId,
+				songTitle: songTitle,
+				songId: songId,
+			});
+		}
+	);
+
 	console.log(livePlayers);
 	console.log(liveGames);
 });
