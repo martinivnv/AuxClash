@@ -36,7 +36,6 @@ const HostGame = () => {
 
 		socket.on("update-host-on-player-answer", (data) => {
 			setSubmissions(...submissions, data);
-			console.log(submissions);
 		});
 
 		socket.on("disconnect", () => {
@@ -57,6 +56,10 @@ const HostGame = () => {
 			});
 		}
 	}, [gameStage]);
+
+	useEffect(() => {
+		console.log(submissions);
+	}, [submissions]);
 
 	const stageReducer = (action) => {
 		/*
