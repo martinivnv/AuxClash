@@ -6,17 +6,10 @@ import Question from "./Question";
 import TopBar from "./TopBar";
 
 const Prompt = ({ question, onCountdownComplete }) => {
-	// const navigate = useNavigate();
-	// const onCountdownComplete = () => {
-	// 	navigate("/play-submissions", {
-	// 		state: { submittedSongs: ["NxxjLD2pmlk", "A__cH65WRvE", "HGorCGszxZU"] },
-	// 	});
-	// };
-
 	return (
 		<div className="flex h-screen flex-col">
 			<div className="basis-1/12">
-				<TopBar seconds={5} onCountdownComplete={onCountdownComplete} />
+				<TopBar seconds={10} onCountdownComplete={onCountdownComplete} />
 			</div>
 
 			<div className="basis-11/12">

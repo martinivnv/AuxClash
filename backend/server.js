@@ -184,9 +184,21 @@ io.on("connection", (socket) => {
 		}
 	);
 
-	socket.on("all-combined-submissions", ({ submissions, lobbyCode }) => {
-		console.log("receiving all-combined-submissions");
-		io.to(lobbyCode).emit("send-submissions-for-voting", submissions);
+	socket.on(
+		"all-combined-submissions",
+		({ submissions, lobbyCode, hostId }) => {
+			io.to(lobbyCode).emit("send-submissions-for-voting", {
+				hostId: hostId,
+				submissions: submissions,
+			});
+		}
+	);
+
+	socket.on("vote-submitted", ({ playerId, votedSongId, hostId }) => {
+		io.to(hostId).emit("update-host-on-vote", {
+			playerId: playerId,
+			votedSongId: votedSongId,
+		});
 	});
 
 	console.log(livePlayers);

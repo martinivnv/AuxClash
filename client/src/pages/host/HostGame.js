@@ -15,6 +15,7 @@ const HostGame = () => {
 	const [gameStage, setGameStage] = useState(0);
 	const [submissions, setSubmissions] = useState([]);
 	const [currentSocket, setCurrentSocket] = useState(null);
+	const [votes, setVotes] = useState([]);
 
 	useEffect(() => {
 		const socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
@@ -37,6 +38,11 @@ const HostGame = () => {
 
 		socket.on("update-host-on-player-answer", (data) => {
 			setSubmissions((oldSubmissions) => [...oldSubmissions, data]);
+		});
+
+		socket.on("update-host-on-vote", (vote) => {
+			setVotes((oldVotes) => [...oldVotes, vote]);
+			console.log(votes);
 		});
 
 		socket.on("disconnect", () => {
@@ -76,11 +82,10 @@ const HostGame = () => {
 				break;
 			case "PromptCountdownComplete":
 				setGameStage(2);
-				console.log("seding all-combined-submissions");
-				console.log(submissions);
 				currentSocket.emit("all-combined-submissions", {
 					submissions: submissions,
 					lobbyCode: lobbyCode,
+					hostId: currentSocket.id,
 				});
 				break;
 			case "AllSubmissionsPlayed":

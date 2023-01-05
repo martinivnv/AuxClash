@@ -14,6 +14,7 @@ const PlayerGame = () => {
 	const [gameStage, setGameStage] = useState(0);
 	const [currentSocket, setCurrentSocket] = useState(null);
 	const [submissions, setSubmissions] = useState([]);
+	const [hostId, setHostId] = useState(null);
 
 	useEffect(() => {
 		const socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
@@ -39,10 +40,13 @@ const PlayerGame = () => {
 			navigate("/");
 		});
 
-		socket.on("send-submissions-for-voting", (data) => {
+		socket.on("send-submissions-for-voting", ({ hostId, submissions }) => {
 			// remove this players submission so they cannot vote for their own
-			const filteredSubmissions = data.filter((s) => s.playerId !== socket.id);
+			const filteredSubmissions = submissions.filter(
+				(s) => s.playerId !== socket.id
+			);
 			setSubmissions(filteredSubmissions);
+			setHostId(hostId);
 		});
 
 		socket.on("disconnect", () => {
@@ -63,13 +67,23 @@ const PlayerGame = () => {
 		});
 	};
 
+	const onVoteSubmitted = (votedSongId) => {
+		currentSocket.emit("vote-submitted", {
+			playerId: currentSocket.id,
+			votedSongId: votedSongId,
+			hostId: hostId,
+		});
+	};
+
 	return (
 		<div>
 			<div>{gameStage}</div>
 			{gameStage === 0 && <Wait />}
 			{gameStage === 1 && <Answer onAnswerSubmitted={onAnswerSubmitted} />}
 			{gameStage === 2 && <Wait />}
-			{gameStage === 3 && <Vote submissions={submissions} />}
+			{gameStage === 3 && (
+				<Vote submissions={submissions} onVoteSubmitted={onVoteSubmitted} />
+			)}
 		</div>
 	);
 };

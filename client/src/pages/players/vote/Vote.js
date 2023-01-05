@@ -1,14 +1,34 @@
-import { useEffect } from "react";
+import { useState } from "react";
 
-const Vote = ({ submissions }) => {
+const VoteButton = ({ songTitle, onClickFunction }) => {
+	return <button onClick={onClickFunction}>{songTitle}</button>;
+};
+
+const Vote = ({ submissions, onVoteSubmitted }) => {
+	const [voteSubmitted, setVoteSubmitted] = useState(false);
+
+	const onClickFunction = (songId) => {
+		onVoteSubmitted(songId);
+		setVoteSubmitted(true);
+	};
+
 	return (
 		<div>
 			<p>Vote for the best pick!</p>
-			<ul>
-				{submissions.map((s) => (
-					<li key={s.songId}>{s.songTitle}</li>
-				))}
-			</ul>
+			{!voteSubmitted ? (
+				<ul>
+					{submissions.map((s) => (
+						<li key={s.songId}>
+							<VoteButton
+								songTitle={s.songTitle}
+								onClickFunction={() => onClickFunction(s.songId)}
+							/>
+						</li>
+					))}
+				</ul>
+			) : (
+				<p>Vote submitted!</p>
+			)}
 		</div>
 	);
 };
