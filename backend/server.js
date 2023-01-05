@@ -168,4 +168,6 @@ io.on("connection", (socket) => {
 			}
 		}
 	});
+	console.log(livePlayers);
+	console.log(liveGames);
 });
