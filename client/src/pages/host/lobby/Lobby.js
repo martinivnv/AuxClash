@@ -38,7 +38,7 @@ const Lobby = () => {
 		});
 
 		socket.on("game-started", () => {
-			navigate(`/host/game/${currentLobbyCode.current}`);
+			navigate(`/host/run/${currentLobbyCode.current}`);
 		});
 
 		return () => {
@@ -56,7 +56,7 @@ const Lobby = () => {
 	return (
 		<div>
 			<div>
-				<h3>Head to auxwar.com and enter the code below to join:</h3>
+				<h3>Head to auxclash.com and enter the code below to join:</h3>
 				<p>{lobbyCode}</p>
 				<br />
 				<button onClick={emitStartGame}>Begin the Game</button>

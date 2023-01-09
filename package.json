@@ -1,19 +1,19 @@
 {
-  "name": "aux-war",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/martinivnv/aux-war.git"
-  },
-  "author": "martinivnv",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/martinivnv/aux-war/issues"
-  },
-  "homepage": "https://github.com/martinivnv/aux-war#readme"
+	"name": "aux-clash",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/martinivnv/aux-war.git"
+	},
+	"author": "martinivnv",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/martinivnv/aux-war/issues"
+	},
+	"homepage": "https://github.com/martinivnv/aux-war#readme"
 }

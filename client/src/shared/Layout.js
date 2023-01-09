@@ -9,8 +9,8 @@ const Layout = () => {
 		<Routes>
 			<Route path="/" element={<Home />}></Route>
 			<Route path="/host/lobby" element={<Lobby />}></Route>
-			<Route path="/host/game/:lobbyCode" element={<HostGame />}></Route>
-			<Route path="/player/game" element={<PlayerGame />}></Route>
+			<Route path="/host/run/:lobbyCode" element={<HostGame />}></Route>
+			<Route path="/player/run" element={<PlayerGame />}></Route>
 		</Routes>
 	);
 };

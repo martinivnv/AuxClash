@@ -7,7 +7,7 @@ const Home = () => {
 
 	return (
 		<div>
-			<h1>Welcome to Aux War</h1>
+			<h1>Welcome to Aux Clash</h1>
 			<div>
 				<input
 					type="text"
@@ -22,13 +22,13 @@ const Home = () => {
 					onChange={(e) => setCode(e.target.value)}
 				/>
 				<Link
-					to="/player/game"
+					to="/player/run"
 					state={{ lobbyCode: code.toUpperCase(), playerName: playerName }}
 				>
-					Join a Game
+					Join a Lobby
 				</Link>
 				<p>Or</p>
-				<Link to="/host/lobby">Start a Game</Link>
+				<Link to="/host/lobby">Start a Lobby</Link>
 			</div>
 		</div>
 	);
