@@ -1,7 +1,9 @@
 import { useState } from "react";
 
-const VoteButton = ({ songTitle, onClickFunction }) => {
-	return <button onClick={onClickFunction}>{songTitle}</button>;
+const VoteButton = ({ songTitle, songArtist, onClickFunction }) => {
+	return (
+		<button onClick={onClickFunction}>{`${songArtist} - ${songTitle}`}</button>
+	);
 };
 
 const Vote = ({ submissions, onVoteSubmitted }) => {
@@ -21,6 +23,7 @@ const Vote = ({ submissions, onVoteSubmitted }) => {
 						<li key={s.songId}>
 							<VoteButton
 								songTitle={s.songTitle}
+								songArtist={s.songArtist}
 								onClickFunction={() => onClickFunction(s.songId, s.songTitle)}
 							/>
 						</li>

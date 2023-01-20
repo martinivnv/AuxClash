@@ -18,7 +18,6 @@ const HostGame = () => {
 	const [gameStage, setGameStage] = useState(0);
 	const [submissions, setSubmissions] = useState([]);
 	const [votes, setVotes] = useState([]);
-	const [songs, setSongs] = useState([]);
 	const accessToken = localStorage.getItem("access_token");
 
 	useEffect(() => {
@@ -51,7 +50,7 @@ const HostGame = () => {
 		});
 
 		socket.on("songs-found", (data) => {
-			setSongs(data.submissions);
+			setSubmissions(data.submissions);
 			console.log(data.submissions);
 		});
 
@@ -101,7 +100,6 @@ const HostGame = () => {
 		stageReducer("NewRound");
 		setSubmissions([]);
 		setVotes([]);
-		setSongs([]);
 	};
 
 	const stageReducer = (action) => {
@@ -118,22 +116,26 @@ const HostGame = () => {
 				setGameStage(1);
 				break;
 			case "SubmissionsDone":
-				setGameStage(2);
-				currentSocket.emit("all-combined-submissions", {
-					submissions: submissions,
-					lobbyCode: lobbyCode,
-					hostId: currentSocket.id,
-					accessToken: accessToken,
-				});
+				if (gameStage !== 2) {
+					setGameStage(2);
+					currentSocket.emit("all-combined-submissions", {
+						submissions: submissions,
+						lobbyCode: lobbyCode,
+						hostId: currentSocket.id,
+						accessToken: accessToken,
+					});
+				}
 				break;
 			case "PromptCountdownComplete":
-				setGameStage(2);
-				currentSocket.emit("all-combined-submissions", {
-					submissions: submissions,
-					lobbyCode: lobbyCode,
-					hostId: currentSocket.id,
-					accessToken: accessToken,
-				});
+				if (gameStage !== 2) {
+					setGameStage(2);
+					currentSocket.emit("all-combined-submissions", {
+						submissions: submissions,
+						lobbyCode: lobbyCode,
+						hostId: currentSocket.id,
+						accessToken: accessToken,
+					});
+				}
 				break;
 			case "AllSubmissionsPlayed":
 				setGameStage(3);
@@ -178,7 +180,7 @@ const HostGame = () => {
 			)}
 			{gameStage === 2 && (
 				<PlaySubmissions
-					submissions={songs}
+					submissions={submissions}
 					onQueueFinished={onQueueFinished}
 				/>
 			)}

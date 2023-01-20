@@ -253,8 +253,8 @@ io.on("connection", (socket) => {
 					// song name - response.data.tracks.items[0].name
 					// song id - response.data.tracks.items[0].id
 					foundSongs.push({
-						artist: response.data.tracks.items[0].artists[0].name,
-						songName: response.data.tracks.items[0].name,
+						songArtist: response.data.tracks.items[0].artists[0].name,
+						songTitle: response.data.tracks.items[0].name,
 						songId: response.data.tracks.items[0].id,
 						playerId: submissions[i].playerId,
 					});
