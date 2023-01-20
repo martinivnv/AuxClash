@@ -8,7 +8,6 @@ const LoginCallback = () => {
 	let code = params.get("code");
 
 	useEffect(() => {
-		console.log("Calling handleCallback");
 		handleCallback(code);
 	}, []);
 

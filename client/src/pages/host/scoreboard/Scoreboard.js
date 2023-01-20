@@ -16,8 +16,6 @@ const Scoreboard = ({
 	}, []);
 
 	useEffect(() => {
-		console.log("scores");
-		console.log(scores);
 		updatePlayerScores();
 	}, [scores]);
 
@@ -54,8 +52,6 @@ const Scoreboard = ({
 		const updatedPlayers = players.map((p) => {
 			return { ...p, score: scores[p.playerId] };
 		});
-		console.log("updated players");
-		console.log(updatedPlayers);
 		setPlayers(updatedPlayers);
 	};
 

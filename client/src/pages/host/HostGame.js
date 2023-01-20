@@ -178,7 +178,7 @@ const HostGame = () => {
 			)}
 			{gameStage === 2 && (
 				<PlaySubmissions
-					submissions={submissions}
+					submissions={songs}
 					onQueueFinished={onQueueFinished}
 				/>
 			)}

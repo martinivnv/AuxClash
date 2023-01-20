@@ -8,9 +8,7 @@ const SpotifyLogin = () => {
 			const response = await fetch(
 				`${process.env.REACT_APP_SERVER_URL}/api/spotify-login`
 			);
-			console.log(response);
 			const data = await response.json();
-			console.log(data);
 			setAuthorizationUrl(data.authorizationUrl);
 		} catch (e) {
 			console.error(e);
