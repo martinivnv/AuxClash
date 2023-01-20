@@ -1,39 +1,25 @@
 import React, { useEffect, useState } from "react";
-import YouTube from "react-youtube";
+import SpotifyPlayer from "./SpotifyPlayer";
 
 const PlaySubmissions = ({ submissions, onQueueFinished }) => {
-	const [showVideo, setShowVideo] = useState(false);
 	const [queueFinished, setQueueFinished] = useState(false);
 	const [currentSong, setCurrentSong] = useState(-1);
-	let videoTarget = null;
+	const [showPlayer, setShowPlayer] = useState(false);
 
-	const opts = {
-		height: "390",
-		width: "640",
-		playerVars: {
-			// https://developers.google.com/youtube/player_parameters
-			autoplay: 1,
-			modestbranding: 1,
-			controls: 0,
+	const submissionsHardCoded = [
+		{
+			artist: "Red Hot Chili Peppers",
+			songName: "Under the Bridge",
+			songId: "3d9DChrdc6BOeFsbrZ3Is0",
+			playerId: "nnAhP1E1a4haiZAdAAAF",
 		},
-	};
-
-	const onReady = (event) => {
-		videoTarget = event.target;
-	};
-
-	const playNext = () => {
-		if (!showVideo) {
-			setShowVideo(true);
-		}
-		if (currentSong < submissions.length - 1) {
-			setCurrentSong((currentSong) => currentSong + 1);
-			// videoTarget.loadVideoById(submissions[currentSong].songId, 0);
-		} else {
-			setQueueFinished(true);
-			setShowVideo(false);
-		}
-	};
+		{
+			artist: "Beach House",
+			songName: "Space Song",
+			songId: "7H0ya83CMmgFcOhw0UB6ow",
+			playerId: "kX3oGEVziKgmqGmdAAAI",
+		},
+	];
 
 	useEffect(() => {
 		if (queueFinished) {
@@ -41,17 +27,25 @@ const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 		}
 	}, [queueFinished]);
 
+	const playNext = () => {
+		if (!showPlayer) {
+			setShowPlayer(true);
+		}
+		if (currentSong < submissionsHardCoded.length - 1) {
+			setCurrentSong((currentSong) => currentSong + 1);
+		} else {
+			setQueueFinished(true);
+			setShowPlayer(false);
+		}
+	};
+
 	return (
 		<div>
 			{!queueFinished ? <button onClick={playNext}>Play next</button> : null}
-			<div className="aspect-video">
-				{showVideo ? (
-					<YouTube
-						videoId={submissions[currentSong].songId}
-						opts={opts}
-						onReady={onReady}
-					/>
-				) : null}
+			<div>
+				{showPlayer && (
+					<SpotifyPlayer trackId={submissionsHardCoded[currentSong].songId} />
+				)}
 			</div>
 		</div>
 	);
