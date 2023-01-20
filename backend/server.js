@@ -8,6 +8,9 @@ const http = require("http");
 const mongoose = require("mongoose");
 const path = require("path");
 const socketIO = require("socket.io");
+const querystring = require("querystring");
+const cors = require("cors");
+const axios = require("axios");
 
 require("dotenv").config();
 const app = express();
@@ -19,6 +22,7 @@ const io = socketIO(server, {
 		methods: ["GET", "POST"],
 	},
 });
+app.use(cors());
 
 // Initialize classes
 var liveGames = new LiveGames();
@@ -40,6 +44,47 @@ server.listen(port, () => {
 	console.log(`Server is running on port: ${port}`);
 });
 
+// Spotify Login =================================================================
+
+const spotify_redirect_uri = `${process.env.APP_URL}/callback`;
+
+app.get("/api/spotify-login", (req, res) => {
+	const authorizeUrl =
+		"https://accounts.spotify.com/authorize?" +
+		querystring.stringify({
+			response_type: "code",
+			client_id: process.env.SPOTIFY_CLIENT_ID,
+			redirect_uri: spotify_redirect_uri,
+		});
+	res.json({ authorizationUrl: authorizeUrl });
+});
+
+app.get("/api/callback", async (req, res) => {
+	try {
+		const { code } = req.query;
+		const { data } = await axios({
+			method: "post",
+			url: "https://accounts.spotify.com/api/token",
+			data: querystring.stringify({
+				grant_type: "client_credentials",
+				code,
+				redirect_uri: spotify_redirect_uri,
+			}),
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				Authorization: `Basic ${Buffer.from(
+					`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+				).toString("base64")}`,
+			},
+		});
+		res.send(data);
+	} catch (e) {
+		res.status(500).send(e);
+		console.log(e);
+	}
+});
+
+// Web Socket ====================================================================
 // When connection is made from client
 io.on("connection", (socket) => {
 	// When host starts a lobby
@@ -175,16 +220,12 @@ io.on("connection", (socket) => {
 		io.to(lobbyCode).emit("update-players-on-stage-change", newStage);
 	});
 
-	socket.on(
-		"answer-submitted",
-		({ playerId, lobbyCode, songTitle, songId }) => {
-			io.to(lobbyCode).emit("update-host-on-player-answer", {
-				playerId: playerId,
-				songTitle: songTitle,
-				songId: songId,
-			});
-		}
-	);
+	socket.on("answer-submitted", ({ playerId, lobbyCode, query }) => {
+		io.to(lobbyCode).emit("update-host-on-player-answer", {
+			playerId: playerId,
+			query: query,
+		});
+	});
 
 	socket.on(
 		"all-combined-submissions",
