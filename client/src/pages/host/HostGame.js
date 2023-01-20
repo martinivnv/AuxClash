@@ -20,7 +20,7 @@ const HostGame = () => {
 	const [votes, setVotes] = useState([]);
 
 	useEffect(() => {
-		const socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
+		const socket = socketIOClient(process.env.REACT_APP_SERVER_URL);
 		setCurrentSocket(socket);
 		socket.on("connect", () => {
 			console.log("Connected to the server");

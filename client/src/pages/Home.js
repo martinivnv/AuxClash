@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import SpotifyLogin from "../shared/SpotifyLogin";
 
 const Home = () => {
 	const [code, setCode] = useState("");
@@ -29,6 +30,7 @@ const Home = () => {
 				</Link>
 				<p>Or</p>
 				<Link to="/host/lobby">Start a Lobby</Link>
+				<SpotifyLogin />
 			</div>
 		</div>
 	);
