@@ -41,13 +41,14 @@ const PlayerGame = () => {
 			navigate("/");
 		});
 
-		socket.on("send-submissions-for-voting", ({ hostId, submissions }) => {
+		socket.on("songs-found", ({ hostId, submissions }) => {
 			// remove this players submission so they cannot vote for their own
 			const filteredSubmissions = submissions.filter(
 				(s) => s.playerId !== socket.id
 			);
 			setSubmissions(filteredSubmissions);
 			setHostId(hostId);
+			console.log(filteredSubmissions);
 		});
 
 		socket.on("disconnect", () => {
@@ -69,8 +70,7 @@ const PlayerGame = () => {
 		currentSocket.emit("answer-submitted", {
 			playerId: currentSocket.id,
 			lobbyCode: lobbyCode,
-			songTitle: data.songTitle,
-			songId: data.songId,
+			query: data.query,
 		});
 	};
 

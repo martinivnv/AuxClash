@@ -18,6 +18,8 @@ const HostGame = () => {
 	const [gameStage, setGameStage] = useState(0);
 	const [submissions, setSubmissions] = useState([]);
 	const [votes, setVotes] = useState([]);
+	const [songs, setSongs] = useState([]);
+	const accessToken = localStorage.getItem("access_token");
 
 	useEffect(() => {
 		const socket = socketIOClient(process.env.REACT_APP_SERVER_URL);
@@ -46,6 +48,11 @@ const HostGame = () => {
 
 		socket.on("update-host-on-vote", (vote) => {
 			setVotes((oldVotes) => [...oldVotes, vote]);
+		});
+
+		socket.on("songs-found", (data) => {
+			setSongs(data.submissions);
+			console.log(data.submissions);
 		});
 
 		socket.on("disconnect", () => {
@@ -94,6 +101,7 @@ const HostGame = () => {
 		stageReducer("NewRound");
 		setSubmissions([]);
 		setVotes([]);
+		setSongs([]);
 	};
 
 	const stageReducer = (action) => {
@@ -115,6 +123,7 @@ const HostGame = () => {
 					submissions: submissions,
 					lobbyCode: lobbyCode,
 					hostId: currentSocket.id,
+					accessToken: accessToken,
 				});
 				break;
 			case "PromptCountdownComplete":
@@ -123,6 +132,7 @@ const HostGame = () => {
 					submissions: submissions,
 					lobbyCode: lobbyCode,
 					hostId: currentSocket.id,
+					accessToken: accessToken,
 				});
 				break;
 			case "AllSubmissionsPlayed":

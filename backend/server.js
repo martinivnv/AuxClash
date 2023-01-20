@@ -229,10 +229,43 @@ io.on("connection", (socket) => {
 
 	socket.on(
 		"all-combined-submissions",
-		({ submissions, lobbyCode, hostId }) => {
-			io.to(lobbyCode).emit("send-submissions-for-voting", {
+		async ({ submissions, lobbyCode, hostId, accessToken }) => {
+			let foundSongs = [];
+			for (let i = 0; i < submissions.length; i++) {
+				try {
+					const response = await axios({
+						method: "GET",
+						url: "https://api.spotify.com/v1/search",
+						params: {
+							q: submissions[i].query,
+							type: "track",
+							market: "US",
+							limit: 1,
+						},
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${accessToken}`,
+						},
+					});
+					// More specifically only going to need:
+					// artist name - response.data.tracks.items[0].artists[0].name
+					// song name - response.data.tracks.items[0].name
+					// song id - response.data.tracks.items[0].id
+					foundSongs.push({
+						artist: response.data.tracks.items[0].artists[0].name,
+						songName: response.data.tracks.items[0].name,
+						songId: response.data.tracks.items[0].id,
+						playerId: submissions[i].playerId,
+					});
+				} catch (error) {
+					console.log(error);
+				}
+			}
+
+			io.to(lobbyCode).emit("songs-found", {
 				hostId: hostId,
-				submissions: submissions,
+				submissions: foundSongs,
 			});
 		}
 	);
