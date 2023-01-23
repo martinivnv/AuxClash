@@ -20,11 +20,11 @@ const Home = () => {
 					type="text"
 					placeholder="Enter Lobby Code..."
 					value={code}
-					onChange={(e) => setCode(e.target.value)}
+					onChange={(e) => setCode(e.target.value.toUpperCase())}
 				/>
 				<Link
 					to="/player/run"
-					state={{ lobbyCode: code.toUpperCase(), playerName: playerName }}
+					state={{ lobbyCode: code, playerName: playerName }}
 				>
 					Join a Lobby
 				</Link>
