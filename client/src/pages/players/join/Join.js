@@ -13,7 +13,9 @@ const Join = () => {
 				value={playerName}
 				onChange={(e) => setPlayerName(e.target.value)}
 			/>
-			<Link to="/player/game">Join Game</Link>
+			<Link to="/player/game" className="link">
+				Join Game
+			</Link>
 		</div>
 	);
 };
