@@ -62,6 +62,14 @@ button:hover {
 	transform: translateY(-2px);
 }
 
+button:disabled {
+	opacity: 40%;
+}
+
+button:disabled:hover {
+	pointer-events: none;
+}
+
 .link {
 	display: inline-block;
 	outline: 0;
