@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import Players from "./Players";
 import Question from "./Question";
-import TopBar from "./TopBar";
+import CountdownTimer from "../../../shared/CountdownTimer";
 
 const Prompt = ({ questions, onCountdownComplete, round }) => {
 	const [questionNumber, setQuestionNumber] = useState(0);
@@ -17,10 +17,7 @@ const Prompt = ({ questions, onCountdownComplete, round }) => {
 
 	return (
 		<div className="flex h-screen flex-col">
-			<div className="basis-1/12">
-				<TopBar seconds={90} onCountdownComplete={onCountdownComplete} />
-			</div>
-
+			<CountdownTimer seconds={1000} onComplete={onCountdownComplete} />
 			<div className="basis-11/12">
 				<div className="flex min-h-full flex-col items-center justify-around text-center">
 					<div className="basis-3/4">

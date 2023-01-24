@@ -6,6 +6,8 @@ import { useParams, useNavigate } from "react-router";
 import WaitForVotes from "./waitForVotes/WaitForVotes";
 import Scoreboard from "./scoreboard/Scoreboard";
 import GameOver from "./gameover/GameOver";
+import GameContainer from "../../shared/GameContainer";
+import tv from "../../resources/crt_tv.png";
 
 const HostGame = () => {
 	const navigate = useNavigate();
@@ -169,8 +171,13 @@ const HostGame = () => {
 	};
 
 	return (
-		<div>
-			<div>{gameStage}</div>
+		<GameContainer>
+			{/* <h3 className="-translate-y-24 text-xl font-bold">Round {round}</h3> */}
+			<img
+				src={tv}
+				alt="crtTV"
+				className="absolute top-1/2 left-1/2 z-0 w-6/12 -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+			/>
 			{gameStage === 1 && (
 				<Prompt
 					questions={questions}
@@ -195,7 +202,7 @@ const HostGame = () => {
 				/>
 			)}
 			{gameStage === 5 && <GameOver />}
-		</div>
+		</GameContainer>
 	);
 };
 

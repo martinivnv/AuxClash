@@ -56,7 +56,7 @@ const Lobby = () => {
 
 	return (
 		<GameContainer>
-			<div className="flex flex-row ">
+			<div className="flex flex-row pt-16">
 				<div className="w-1/2">
 					<h3>Head to auxclash.com and enter the code below to join:</h3>
 					<p className="m-8 text-4xl font-bold">{lobbyCode}</p>
