@@ -9,7 +9,7 @@ const TVContainer = ({ children }) => {
 				className="z-2 relative mix-blend-difference"
 				width="1300"
 			/>
-			<div className="relative bottom-1/2 w-9/12 pl-4">{children}</div>
+			<div className="relative bottom-1/2 w-8/12 pl-16">{children}</div>
 		</div>
 	);
 };
