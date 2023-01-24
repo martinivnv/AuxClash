@@ -4,11 +4,11 @@ import MainContainer from "./shared/MainContainer";
 
 function App() {
 	return (
-		<MainContainer>
-			<BrowserRouter>
+		<BrowserRouter>
+			<MainContainer>
 				<Layout />
-			</BrowserRouter>
-		</MainContainer>
+			</MainContainer>
+		</BrowserRouter>
 	);
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socketIOClient from "socket.io-client";
+import GameContainer from "../../../shared/GameContainer";
 
 import PlayerList from "./PlayerList";
 
@@ -54,7 +55,7 @@ const Lobby = () => {
 	};
 
 	return (
-		<div>
+		<GameContainer>
 			<div>
 				<h3>Head to auxclash.com and enter the code below to join:</h3>
 				<p>{lobbyCode}</p>
@@ -65,7 +66,7 @@ const Lobby = () => {
 				<h3>Aux Warriors:</h3>
 				<PlayerList players={players} />
 			</div>
-		</div>
+		</GameContainer>
 	);
 };
 

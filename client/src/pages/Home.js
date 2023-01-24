@@ -11,9 +11,13 @@ const Home = () => {
 	return (
 		<div className="flex h-screen flex-col items-center ">
 			<div className="h-16"></div>
-			<img src={mainLogo} alt="auxClashLogo" width="400" />
+			<img
+				src={mainLogo}
+				alt="auxClashLogo"
+				className="w-9/12 mix-blend-hard-light sm:w-4/12"
+			/>
 			<div>
-				<div className="flex items-center space-x-4">
+				<div className="flex flex-col items-center max-sm:space-y-4 sm:flex-row sm:space-x-4">
 					<input
 						type="text"
 						placeholder="Enter your name..."
@@ -30,6 +34,11 @@ const Home = () => {
 						className="link"
 						to="/player/run"
 						state={{ lobbyCode: code, playerName: playerName }}
+						onClick={(e) => {
+							if (playerName === "" || code === "") {
+								e.preventDefault();
+							}
+						}}
 					>
 						Join a Lobby
 					</Link>
@@ -39,6 +48,10 @@ const Home = () => {
 				<Link to="/host/lobby" className="link">
 					Start a Lobby
 				</Link>
+			</div>
+			<div className="absolute inset-x-0 bottom-0 flex flex-col justify-between px-8 py-4 sm:flex-row">
+				<div>© 2023 Martin Ivanov</div>
+				<div>Privacy Policy | Contact Us</div>
 			</div>
 		</div>
 	);
