@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import TVContainer from "../../../shared/TVContainer";
 import SpotifyPlayer from "./SpotifyPlayer";
 
 const PlaySubmissions = ({ submissions, onQueueFinished }) => {
@@ -25,12 +26,14 @@ const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 	};
 
 	return (
-		<div>
-			{!queueFinished ? <button onClick={playNext}>Play next</button> : null}
-			<div>
+		<div className="flex min-h-full flex-col items-center justify-around text-center">
+			<div className="flex basis-3/4 flex-col items-center justify-start text-center">
 				{showPlayer && (
 					<SpotifyPlayer trackId={submissions[currentSong].songId} />
 				)}
+			</div>
+			<div className="basis-1/4">
+				{!queueFinished ? <button onClick={playNext}>Play next</button> : null}
 			</div>
 		</div>
 	);

@@ -48,8 +48,9 @@ const Home = () => {
 				<Link to="/host/lobby" className="link">
 					Start a Lobby
 				</Link>
+				<SpotifyLogin />
 			</div>
-			<div className="absolute inset-x-0 bottom-0 flex flex-col justify-between px-8 py-4 sm:flex-row">
+			<div className="absolute inset-x-0 bottom-0 flex flex-col justify-between px-8 py-4 text-base sm:flex-row">
 				<div>© 2023 Martin Ivanov</div>
 				<div>Privacy Policy | Contact Us</div>
 			</div>
