@@ -33,7 +33,8 @@ const Scoreboard = ({
 		const parsedVotes = submissions.map((s) => {
 			const matchingPlayer = players.find((p) => p.playerId === s.playerId);
 			const numVotes = votesPerSong[s.songId] || 0;
-			const newScore = matchingPlayer.score + 1200 * numVotes;
+			const oldScore = matchingPlayer.score;
+			const newScore = oldScore + 1200 * numVotes;
 			newScores[s.playerId] = newScore;
 			return {
 				songTitle: s.songTitle,
@@ -41,6 +42,7 @@ const Scoreboard = ({
 				numVotes: numVotes,
 				playerId: s.playerId,
 				playerName: matchingPlayer.playerName,
+				oldScore: oldScore,
 				playerScore: newScore,
 			};
 		});
@@ -62,7 +64,7 @@ const Scoreboard = ({
 				{consolidatedVotes.map((s) => (
 					<li
 						key={s.songId}
-					>{`${s.songTitle} --- ${s.numVotes} --- ${s.playerName} --- ${s.playerScore}`}</li>
+					>{`${s.songTitle} --- ${s.numVotes} Votes --- ${s.playerName} --- ${s.oldScore} -> ${s.playerScore}`}</li>
 				))}
 			</ul>
 			<button onClick={onEndRound}>End Round</button>
