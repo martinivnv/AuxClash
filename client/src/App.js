@@ -1,14 +1,14 @@
-import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 import Layout from "./shared/Layout";
+import MainContainer from "./shared/MainContainer";
 
 function App() {
 	return (
-		<div className="App">
+		<MainContainer>
 			<BrowserRouter>
 				<Layout />
 			</BrowserRouter>
-		</div>
+		</MainContainer>
 	);
 }
 
