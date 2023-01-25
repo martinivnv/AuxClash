@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SpotifyLogin from "../shared/SpotifyLogin";
+import axios from "axios";
 import "../css/global.css";
 import mainLogo from "../resources/white logo large.png";
+import Footer from "../shared/Footer";
 
 const Home = () => {
 	const [code, setCode] = useState("");
 	const [playerName, setPlayerName] = useState("");
+	const [authorizationUrl, setAuthorizationUrl] = useState(null);
+
+	useEffect(() => {
+		if (authorizationUrl) {
+			window.location.href = authorizationUrl;
+			return null;
+		}
+	}, [authorizationUrl]);
+
+	const onStartLobby = async () => {
+		try {
+			const response = await fetch(
+				`${process.env.REACT_APP_SERVER_URL}/api/spotify-login`
+			);
+			const data = await response.json();
+			setAuthorizationUrl(data.authorizationUrl);
+		} catch (e) {
+			console.error(e);
+		}
+	};
 
 	return (
 		<div className="flex h-screen flex-col items-center ">
@@ -45,14 +67,8 @@ const Home = () => {
 				</div>
 
 				<p className="my-4">Or</p>
-				<Link to="/host/lobby" className="link">
-					Start a Lobby
-				</Link>
-				<SpotifyLogin />
-			</div>
-			<div className="absolute inset-x-0 bottom-0 flex flex-col justify-between px-8 py-4 text-base sm:flex-row">
-				<div>© 2023 Martin Ivanov</div>
-				<div>Privacy Policy | Contact Us</div>
+				<button onClick={onStartLobby}>Start a Lobby</button>
+				<Footer />
 			</div>
 		</div>
 	);
