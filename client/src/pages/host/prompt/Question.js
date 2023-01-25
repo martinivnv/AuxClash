@@ -1,7 +1,7 @@
 const Question = ({ question }) => {
 	return (
-		<div className="flex flex-col">
-			<p className="text-xl font-bold">{question.question}</p>
+		<div className="flex flex-col opacity-80">
+			<p className="text-2xl font-bold">{question.question}</p>
 			{question.image !== null && <div>{question.image}</div>}
 		</div>
 	);
