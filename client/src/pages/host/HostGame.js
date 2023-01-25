@@ -170,7 +170,7 @@ const HostGame = () => {
 	};
 
 	return (
-		<GameContainer>
+		<GameContainer showFooter={true}>
 			{/* <h3 className="-translate-y-24 text-xl font-bold">Round {round}</h3> */}
 			{gameStage === 1 && (
 				<Prompt

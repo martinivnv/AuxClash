@@ -1,6 +1,7 @@
 import mainLogo from "../resources/white logo large.png";
+import Footer from "./Footer";
 
-const GameContainer = ({ children }) => {
+const GameContainer = ({ children, showFooter = false }) => {
 	return (
 		<div>
 			<div className="w-1/2 sm:w-1/6">
@@ -11,6 +12,7 @@ const GameContainer = ({ children }) => {
 				/>
 			</div>
 			{children}
+			{showFooter && <Footer />}
 		</div>
 	);
 };
