@@ -9,19 +9,6 @@ import Footer from "../shared/Footer";
 const Home = () => {
 	const [code, setCode] = useState("");
 	const [playerName, setPlayerName] = useState("");
-	const [authorizationUrl, setAuthorizationUrl] = useState(null);
-
-	const onStartLobby = async () => {
-		try {
-			const response = await fetch(
-				`${process.env.REACT_APP_SERVER_URL}/api/spotify-login`
-			);
-			const data = await response.json();
-			setAuthorizationUrl(data.authorizationUrl);
-		} catch (e) {
-			console.error(e);
-		}
-	};
 
 	return (
 		<div className="flex h-screen flex-col items-center ">
@@ -50,7 +37,7 @@ const Home = () => {
 						to="/player/run"
 						state={{ lobbyCode: code, playerName: playerName }}
 						onClick={(e) => {
-							if (playerName === "" || code === "") {
+							if (playerName.trim() === "" || code.trim() === "") {
 								e.preventDefault();
 							}
 						}}

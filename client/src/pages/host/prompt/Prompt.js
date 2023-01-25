@@ -25,9 +25,6 @@ const Prompt = ({ questions, onCountdownComplete, round }) => {
 						<Question question={questions[questionNumber]} />
 					</TVContainer>
 				</div>
-				<div className="basis-1/4">
-					<Players />
-				</div>
 			</div>
 		</div>
 	);
