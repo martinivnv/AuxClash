@@ -55,7 +55,7 @@ const Lobby = () => {
 	};
 
 	return (
-		<GameContainer>
+		<GameContainer showFooter={true}>
 			<div className="flex flex-row pt-16">
 				<div className="w-1/2">
 					<h3>Head to auxclash.com and enter the code below to join:</h3>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import socketIOClient from "socket.io-client";
+import GameContainer from "../../shared/GameContainer";
 import GameOver from "../host/gameover/GameOver";
 
 import Answer from "./answer/Answer";
@@ -84,8 +85,7 @@ const PlayerGame = () => {
 	};
 
 	return (
-		<div>
-			<div>{gameStage}</div>
+		<GameContainer showFooter={true}>
 			{gameStage === 0 && <Wait />}
 			{gameStage === 1 && <Answer onAnswerSubmitted={onAnswerSubmitted} />}
 			{gameStage === 2 && <Wait />}
@@ -94,7 +94,7 @@ const PlayerGame = () => {
 			)}
 			{gameStage === 4 && <Wait />}
 			{gameStage === 5 && <GameOver />}
-		</div>
+		</GameContainer>
 	);
 };
 
