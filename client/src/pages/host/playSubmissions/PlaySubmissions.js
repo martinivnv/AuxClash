@@ -30,7 +30,9 @@ const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 				{showPlayer ? (
 					<SpotifyPlayer trackId={submissions[currentSong].songId} />
 				) : (
-					<div>Time to listen to the submissions!</div>
+					<div style={{ display: "block", width: "500px", height: "400px" }}>
+						Time to listen to the submissions!
+					</div>
 				)}
 			</div>
 			<div className="basis-1/4">

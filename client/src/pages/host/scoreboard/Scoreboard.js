@@ -38,6 +38,7 @@ const Scoreboard = ({
 			newScores[s.playerId] = newScore;
 			return {
 				songTitle: s.songTitle,
+				songArtist: s.songArtist,
 				songId: s.songId,
 				numVotes: numVotes,
 				playerId: s.playerId,
@@ -58,16 +59,24 @@ const Scoreboard = ({
 	};
 
 	return (
-		<div>
-			<h2>Scoreboard</h2>
-			<ul>
-				{consolidatedVotes.map((s) => (
-					<li
-						key={s.songId}
-					>{`${s.songTitle} --- ${s.numVotes} Votes --- ${s.playerName} --- ${s.oldScore} -> ${s.playerScore}`}</li>
-				))}
-			</ul>
-			<button onClick={onEndRound}>End Round</button>
+		<div className="absolute top-1/3 left-1/2 w-2/5 -translate-x-1/2 -translate-y-1/3">
+			<h2 className="mb-2 text-4xl font-bold">Scoreboard</h2>
+			<div
+				className="rounded-md py-8 px-8 mix-blend-hard-light"
+				style={{ backgroundColor: "#ffffff6e" }}
+			>
+				<ul>
+					{consolidatedVotes.map((s) => (
+						<li key={s.songId} className="mb-4">
+							<div className="text-2xl font-bold text-black">{`${s.songTitle} --- ${s.numVotes} Votes`}</div>
+							<div className="text-xl">{`${s.playerName} --- ${s.oldScore} -> ${s.playerScore}`}</div>
+						</li>
+					))}
+				</ul>
+			</div>
+			<button onClick={onEndRound} className="mt-4 text-2xl">
+				End Round
+			</button>
 		</div>
 	);
 };
