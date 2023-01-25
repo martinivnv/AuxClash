@@ -39,37 +39,11 @@ input {
 }
 
 input:focus {
-	border: 2px solid #000;
-	border-radius: 4px;
-}
-
-button {
-	display: inline-block;
-	outline: 0;
-	border: 0;
-	cursor: pointer;
-	background: #000000;
-	color: #ffffff;
+	outline: 3px solid black;
 	border-radius: 8px;
-	padding: 14px 24px 16px;
-	font-size: 18px;
-	font-weight: 700;
-	line-height: 1;
-	transition: transform 200ms, background 200ms;
 }
 
-button:hover {
-	transform: translateY(-2px);
-}
-
-button:disabled {
-	opacity: 40%;
-}
-
-button:disabled:hover {
-	pointer-events: none;
-}
-
+button,
 .link {
 	display: inline-block;
 	outline: 0;
@@ -85,6 +59,21 @@ button:disabled:hover {
 	transition: transform 200ms, background 200ms;
 }
 
+button:hover,
 .link:hover {
 	transform: translateY(-2px);
+}
+
+button:focus,
+.link:focus {
+	outline: 2px solid white;
+	border-radius: 8px;
+}
+
+button:disabled {
+	opacity: 40%;
+}
+
+button:disabled:hover {
+	pointer-events: none;
 }
