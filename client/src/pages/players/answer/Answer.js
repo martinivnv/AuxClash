@@ -4,8 +4,7 @@ const Answer = ({ onAnswerSubmitted }) => {
 	const [submitted, setSubmitted] = useState(false);
 	const [query, setQuery] = useState("");
 
-	const onSubmit = (e, query) => {
-		e.preventDefault();
+	const onSubmit = () => {
 		onAnswerSubmitted({
 			query: query,
 		});

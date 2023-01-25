@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SpotifyLogin = () => {
+const SpotifyLogin = ({ buttonText }) => {
 	const [authorizationUrl, setAuthorizationUrl] = useState(null);
 
 	const handleClick = async () => {
@@ -20,7 +20,7 @@ const SpotifyLogin = () => {
 		return null;
 	}
 
-	return <button onClick={handleClick}>Login with Spotify</button>;
+	return <button onClick={handleClick}>{buttonText}</button>;
 };
 
 export default SpotifyLogin;

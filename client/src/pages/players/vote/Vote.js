@@ -2,7 +2,10 @@ import { useState } from "react";
 
 const VoteButton = ({ songTitle, songArtist, onClickFunction }) => {
 	return (
-		<button onClick={onClickFunction}>{`${songArtist} - ${songTitle}`}</button>
+		<button
+			onClick={onClickFunction}
+			className="mb-4 h-20 w-8/12"
+		>{`${songArtist} - ${songTitle}`}</button>
 	);
 };
 
@@ -16,7 +19,7 @@ const Vote = ({ submissions, onVoteSubmitted }) => {
 
 	return (
 		<div>
-			<p>Vote for the best pick!</p>
+			<p className="mb-6 text-3xl font-bold">Vote for the best pick!</p>
 			{!voteSubmitted ? (
 				<ul>
 					{submissions.map((s) => (

@@ -11,13 +11,6 @@ const Home = () => {
 	const [playerName, setPlayerName] = useState("");
 	const [authorizationUrl, setAuthorizationUrl] = useState(null);
 
-	useEffect(() => {
-		if (authorizationUrl) {
-			window.location.href = authorizationUrl;
-			return null;
-		}
-	}, [authorizationUrl]);
-
 	const onStartLobby = async () => {
 		try {
 			const response = await fetch(
@@ -67,7 +60,7 @@ const Home = () => {
 				</div>
 
 				<p className="my-4">Or</p>
-				<button onClick={onStartLobby}>Start a Lobby</button>
+				<SpotifyLogin buttonText={"Start a Lobby"} />
 				<Footer />
 			</div>
 		</div>
