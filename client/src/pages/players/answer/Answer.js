@@ -26,7 +26,7 @@ const Answer = ({ onAnswerSubmitted }) => {
 						placeholder="Enter your answer..."
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
-						className="h-12 w-full"
+						className="h-16 w-full"
 					/>
 					<button onClick={onSubmit} className="mt-4 w-full">
 						Submit

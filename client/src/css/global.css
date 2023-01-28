@@ -43,6 +43,13 @@ input:focus {
 	border-radius: 8px;
 }
 
+@media only screen and (max-width: 640px) {
+	input {
+		height: 60px;
+		width: 75vw;
+	}
+}
+
 button,
 .link {
 	display: inline-block;
