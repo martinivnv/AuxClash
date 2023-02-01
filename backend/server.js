@@ -97,11 +97,17 @@ io.on("connection", (socket) => {
 			lobbyCode += characters.charAt(Math.floor(Math.random() * 36));
 		}
 
-		liveGames.addGame(lobbyCode, socket.id, false, {
-			stage: 0,
-			round: 0,
-			category: null,
-		});
+		liveGames.addGame(
+			lobbyCode,
+			socket.id,
+			false,
+			{
+				stage: 0,
+				round: 0,
+				category: null,
+			},
+			[]
+		);
 
 		socket.join(lobbyCode);
 
@@ -125,14 +131,14 @@ io.on("connection", (socket) => {
 		var game = liveGames.getGameByLobbyCode(lobbyCode); //Gets game with old host id
 		if (game) {
 			const oldHostId = game.hostId;
-			game.hostId = socket.id; //Changes the game host id to new host id
+			liveGames.updateGameHostId(oldHostId, socket.id); //Changes the game host id to new host id
 			socket.join(game.lobbyCode);
-			let connectedPlayers = [];
-			for (var i = 0; i < Object.keys(livePlayers.players).length; i++) {
-				if (livePlayers.players[i].hostId == oldHostId) {
-					livePlayers.players[i].hostId = socket.id;
-					connectedPlayers.push(livePlayers.players[i]);
-				}
+
+			const connectedPlayers = liveGames
+				.getConnectedPlayerIds(socket.id)
+				.map((id) => livePlayers.getPlayer(id));
+			for (var i = 0; i < connectedPlayers.length; i++) {
+				livePlayers.updateHostId(connectedPlayers[i].playerId, socket.id);
 			}
 
 			socket.emit("game-questions", [
@@ -161,14 +167,17 @@ io.on("connection", (socket) => {
 	socket.on("player-join", ({ lobbyCode, playerName }) => {
 		const matchingGame = liveGames.getGameByLobbyCode(lobbyCode);
 
-		if (typeof matchingGame !== "undefined") {
+		if (matchingGame) {
 			var hostId = matchingGame.hostId; //Get the id of the host of game
 
 			livePlayers.addPlayer(hostId, socket.id, playerName, 0); //add player to game
 
 			socket.join(lobbyCode); //Player is joining room based on lobby code
+			liveGames.addConnectedPlayer(hostId, socket.id);
 
-			let updatedPlayers = livePlayers.getPlayers(hostId);
+			const updatedPlayers = liveGames
+				.getConnectedPlayerIds(hostId)
+				.map((id) => livePlayers.getPlayer(id));
 
 			io.to(lobbyCode).emit("update-player-lobby", updatedPlayers); //Sending host player data to display
 		} else {
@@ -184,12 +193,13 @@ io.on("connection", (socket) => {
 		if (game) {
 			//Checking to see if host was disconnected or was sent to game view
 			if (game.gameLive == false) {
-				liveGames.removeGame(socket.id); //Remove the game from games class
 				console.log("Game ended with code:", game.lobbyCode);
 
-				let playersToRemove = livePlayers.getPlayers(game.hostId); //Getting all players in the game
+				let playersToRemove = liveGames.getConnectedPlayerIds(socket.id); //Getting all players in the game
 
 				playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
+
+				liveGames.removeGame(socket.id); //Remove the game from games class
 
 				io.to(game.lobbyCode).emit("host-disconnect"); //Send player back to 'join' screen
 				socket.leave(game.lobbyCode); //Socket is leaving room
@@ -199,6 +209,7 @@ io.on("connection", (socket) => {
 			let player = livePlayers.getPlayer(socket.id); //Getting player with socket.id
 			//If a player has been found with that id
 			if (player) {
+				console.log("Player leaving named:", player.playerName);
 				let hostId = player.hostId; //Gets id of host of the game
 				game = liveGames.getGameByHostId(hostId); //Gets game data with hostId
 				if (game) {
@@ -206,11 +217,17 @@ io.on("connection", (socket) => {
 
 					if (game.gameLive == false) {
 						livePlayers.removePlayer(socket.id); //Removes player from players class
-						let playersInGame = livePlayers.getPlayers(lobbyCode);
+						liveGames.removeConnectedPlayer(hostId, socket.id);
+
+						const playersInGame = liveGames
+							.getConnectedPlayerIds(hostId)
+							.map((id) => livePlayers.getPlayer(id));
 
 						io.to(lobbyCode).emit("update-player-lobby", playersInGame); //Sends data to host to update screen
 						socket.leave(lobbyCode); //Player is leaving the room
 					}
+				} else {
+					livePlayers.removePlayer(socket.id); //Removes player from players class
 				}
 			}
 		}
@@ -288,7 +305,7 @@ io.on("connection", (socket) => {
 			liveGames.removeGame(socket.id); //Remove the game from games class
 			console.log("Game ended with code:", game.lobbyCode);
 
-			let playersToRemove = livePlayers.getPlayers(game.hostId); //Getting all players in the game
+			const playersToRemove = liveGames.getConnectedPlayerIds(game.hostId); //Getting all players in the game
 
 			playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
 
