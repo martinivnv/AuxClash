@@ -139,7 +139,14 @@ const HostGame = () => {
 				}
 				break;
 			case "AllSubmissionsPlayed":
-				setGameStage(3);
+				if (submissions.length > 1) {
+					setGameStage(3);
+				} else {
+					setGameStage(4);
+				}
+				break;
+			case "VotingCountdownComplete":
+				setGameStage(4);
 				break;
 			case "VotingDone":
 				setGameStage(4);
@@ -159,6 +166,10 @@ const HostGame = () => {
 
 	const onPromptCountdownComplete = () => {
 		stageReducer("PromptCountdownComplete");
+	};
+
+	const onVotingCountdownComplete = () => {
+		stageReducer("VotingCountdownComplete");
 	};
 
 	const onQueueFinished = () => {
@@ -185,7 +196,9 @@ const HostGame = () => {
 					onQueueFinished={onQueueFinished}
 				/>
 			)}
-			{gameStage === 3 && <WaitForVotes />}
+			{gameStage === 3 && (
+				<WaitForVotes onCountdownComplete={onVotingCountdownComplete} />
+			)}
 			{gameStage === 4 && (
 				<Scoreboard
 					votes={votes}

@@ -5,15 +5,11 @@ const CountdownTimer = ({ seconds, onComplete }) => {
 	const [startTime, setStartTime] = useState(Date.now());
 
 	const renderer = ({ hours, minutes, seconds, completed }) => {
-		if (completed) {
-			onComplete();
-		} else {
-			return (
-				<span>
-					{zeroPad(minutes)}:{zeroPad(seconds)}
-				</span>
-			);
-		}
+		return (
+			<span>
+				{zeroPad(minutes)}:{zeroPad(seconds)}
+			</span>
+		);
 	};
 
 	return (
