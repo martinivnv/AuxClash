@@ -55,10 +55,10 @@ const Scoreboard = ({
 
 	const compareSongs = (a, b) => {
 		if (a.numVotes > b.numVotes) {
-			return 1;
+			return -1;
 		}
 		if (a.numVotes < b.numVotes) {
-			return -1;
+			return 1;
 		}
 		return 0;
 	};
