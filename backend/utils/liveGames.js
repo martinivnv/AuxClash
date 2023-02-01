@@ -2,8 +2,15 @@ class LiveGames {
 	constructor() {
 		this.games = {};
 	}
-	addGame(lobbyCode, hostId, gameLive, gameData, connectedPlayers) {
-		var game = { lobbyCode, gameLive, connectedPlayers, gameData };
+	addGame(
+		lobbyCode,
+		hostId,
+		gameStarted,
+		gameLive,
+		gameData,
+		connectedPlayers
+	) {
+		var game = { lobbyCode, gameStarted, gameLive, connectedPlayers, gameData };
 		// gameData: {
 		//  category: string,
 		//  stage: 0,
@@ -50,6 +57,9 @@ class LiveGames {
 			players.splice(index, 1);
 		}
 		this.games[hostId].connectedPlayers = players;
+	}
+	setGameLive(hostId) {
+		this.games[hostId].gameLive = true;
 	}
 }
 

@@ -101,6 +101,7 @@ io.on("connection", (socket) => {
 			lobbyCode,
 			socket.id,
 			false,
+			false,
 			{
 				stage: 0,
 				round: 0,
@@ -120,7 +121,7 @@ io.on("connection", (socket) => {
 	socket.on("host-start-game", ({ category, hostId }) => {
 		console.log("host-start-game received");
 		var game = liveGames.getGameByHostId(hostId); // Get the game based on socket.id
-		game.gameLive = true;
+		game.gameStarted = true;
 		game.gameData.category = category;
 		socket.emit("game-started", game.hostId); // Tell host that game has started
 	});
@@ -133,6 +134,7 @@ io.on("connection", (socket) => {
 			const oldHostId = game.hostId;
 			liveGames.updateGameHostId(oldHostId, socket.id); //Changes the game host id to new host id
 			socket.join(game.lobbyCode);
+			liveGames.setGameLive(socket.id); // This makes it so that when the host disconnects, all players are kicked
 
 			const connectedPlayers = liveGames
 				.getConnectedPlayerIds(socket.id)
@@ -179,7 +181,7 @@ io.on("connection", (socket) => {
 				.getConnectedPlayerIds(hostId)
 				.map((id) => livePlayers.getPlayer(id));
 
-			io.to(lobbyCode).emit("update-player-lobby", updatedPlayers); //Sending host player data to display
+			io.to(lobbyCode).emit("update-host-on-connected-players", updatedPlayers); //Sending host player data to display
 		} else {
 			// No game has been found
 			socket.emit("no-game-found");
@@ -190,9 +192,11 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
 		//If a game hosted by that id is found, the socket disconnected is a host
+		console.log("socket disconnected");
 		if (game) {
+			console.log(game);
 			//Checking to see if host was disconnected or was sent to game view
-			if (game.gameLive == false) {
+			if (game.gameStarted == false || game.gameLive == true) {
 				console.log("Game ended with code:", game.lobbyCode);
 
 				let playersToRemove = liveGames.getConnectedPlayerIds(socket.id); //Getting all players in the game
@@ -214,18 +218,18 @@ io.on("connection", (socket) => {
 				game = liveGames.getGameByHostId(hostId); //Gets game data with hostId
 				if (game) {
 					let lobbyCode = game.lobbyCode; //Gets the lobby code of the game
+					livePlayers.removePlayer(socket.id); //Removes player from players class
+					liveGames.removeConnectedPlayer(hostId, socket.id);
 
-					if (game.gameLive == false) {
-						livePlayers.removePlayer(socket.id); //Removes player from players class
-						liveGames.removeConnectedPlayer(hostId, socket.id);
+					const playersInGame = liveGames
+						.getConnectedPlayerIds(hostId)
+						.map((id) => livePlayers.getPlayer(id));
 
-						const playersInGame = liveGames
-							.getConnectedPlayerIds(hostId)
-							.map((id) => livePlayers.getPlayer(id));
-
-						io.to(lobbyCode).emit("update-player-lobby", playersInGame); //Sends data to host to update screen
-						socket.leave(lobbyCode); //Player is leaving the room
-					}
+					io.to(lobbyCode).emit(
+						"update-host-on-connected-players",
+						playersInGame
+					); //Sends data to host to update screen
+					socket.leave(lobbyCode); //Player is leaving the room
 				} else {
 					livePlayers.removePlayer(socket.id); //Removes player from players class
 				}
