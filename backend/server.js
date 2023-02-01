@@ -170,18 +170,27 @@ io.on("connection", (socket) => {
 		const matchingGame = liveGames.getGameByLobbyCode(lobbyCode);
 
 		if (matchingGame) {
-			var hostId = matchingGame.hostId; //Get the id of the host of game
+			if (!matchingGame.gameStarted) {
+				console.log(playerName, "joined");
+				var hostId = matchingGame.hostId; //Get the id of the host of game
 
-			livePlayers.addPlayer(hostId, socket.id, playerName, 0); //add player to game
+				livePlayers.addPlayer(hostId, socket.id, playerName, 0); //add player to game
 
-			socket.join(lobbyCode); //Player is joining room based on lobby code
-			liveGames.addConnectedPlayer(hostId, socket.id);
+				socket.join(lobbyCode); //Player is joining room based on lobby code
+				liveGames.addConnectedPlayer(hostId, socket.id);
 
-			const updatedPlayers = liveGames
-				.getConnectedPlayerIds(hostId)
-				.map((id) => livePlayers.getPlayer(id));
+				const updatedPlayers = liveGames
+					.getConnectedPlayerIds(hostId)
+					.map((id) => livePlayers.getPlayer(id));
 
-			io.to(lobbyCode).emit("update-host-on-connected-players", updatedPlayers); //Sending host player data to display
+				io.to(lobbyCode).emit(
+					"update-host-on-connected-players",
+					updatedPlayers
+				); //Sending host player data to display
+			} else {
+				// No game has been found
+				socket.emit("no-game-found");
+			}
 		} else {
 			// No game has been found
 			socket.emit("no-game-found");
@@ -192,7 +201,6 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
 		//If a game hosted by that id is found, the socket disconnected is a host
-		console.log("socket disconnected");
 		if (game) {
 			console.log(game);
 			//Checking to see if host was disconnected or was sent to game view
