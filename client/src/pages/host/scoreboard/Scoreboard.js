@@ -12,7 +12,9 @@ const Scoreboard = ({
 
 	useEffect(() => {
 		const votesPerSong = countVotes();
-		setConsolidatedVotes(mapVotesToSongsAndPlayers(votesPerSong));
+		const unsortedVotes = mapVotesToSongsAndPlayers(votesPerSong);
+		const sortedVotes = unsortedVotes.sort(compareSongs);
+		setConsolidatedVotes(sortedVotes);
 	}, []);
 
 	useEffect(() => {
@@ -49,6 +51,16 @@ const Scoreboard = ({
 		});
 		setScores(newScores);
 		return parsedVotes;
+	};
+
+	const compareSongs = (a, b) => {
+		if (a.numVotes > b.numVotes) {
+			return 1;
+		}
+		if (a.numVotes < b.numVotes) {
+			return -1;
+		}
+		return 0;
 	};
 
 	const updatePlayerScores = () => {
