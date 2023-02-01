@@ -78,16 +78,16 @@ const HostGame = () => {
 	}, [round]);
 
 	useEffect(() => {
-		if (submissions.length === players.length && players.length > 0) {
+		if (submissions.length >= players.length && players.length > 0) {
 			stageReducer("SubmissionsDone");
 		}
-	}, [submissions]);
+	}, [players, submissions]);
 
 	useEffect(() => {
-		if (votes.length === players.length && players.length > 0) {
+		if (votes.length >= players.length && players.length > 0) {
 			stageReducer("VotingDone");
 		}
-	}, [votes]);
+	}, [players, votes]);
 
 	useEffect(() => {
 		if (gameStage === 5) {

@@ -30,7 +30,7 @@ const Lobby = () => {
 			currentLobbyCode.current = data.lobbyCode;
 		});
 
-		socket.on("update-player-lobby", (data) => {
+		socket.on("update-host-on-connected-players", (data) => {
 			setPlayers(data);
 		});
 
