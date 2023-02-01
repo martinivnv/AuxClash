@@ -1,30 +1,55 @@
 class LiveGames {
 	constructor() {
-		this.games = [];
+		this.games = {};
 	}
-	addGame(lobbyCode, hostId, gameLive, gameData) {
-		var game = { lobbyCode, hostId, gameLive, gameData };
+	addGame(lobbyCode, hostId, gameLive, gameData, connectedPlayers) {
+		var game = { lobbyCode, gameLive, connectedPlayers, gameData };
 		// gameData: {
 		//  category: string,
 		//  stage: 0,
 		// 	round: 0,
 		// }
-		this.games.push(game);
+		this.games[hostId] = game;
 		return game;
 	}
 	removeGame(hostId) {
-		var game = this.getGameByHostId(hostId);
+		const game = this.games[hostId];
 
-		if (game) {
-			this.games = this.games.filter((game) => game.hostId !== hostId);
-		}
+		delete this.games[hostId];
+
 		return game;
 	}
 	getGameByHostId(hostId) {
-		return this.games.find((game) => game.hostId === hostId);
+		return this.games[hostId];
 	}
 	getGameByLobbyCode(lobbyCode) {
-		return this.games.find((game) => game.lobbyCode === lobbyCode);
+		for (const gameId in this.games) {
+			const thisGame = this.games[gameId];
+			if (thisGame.lobbyCode == lobbyCode) {
+				return { ...thisGame, hostId: gameId };
+			}
+		}
+		return null;
+	}
+	updateGameHostId(oldHostId, newHostId) {
+		const thisGame = this.games[oldHostId];
+		this.games[newHostId] = { ...thisGame };
+		delete this.games[oldHostId];
+		return true;
+	}
+	getConnectedPlayerIds(hostId) {
+		return this.games[hostId].connectedPlayers;
+	}
+	addConnectedPlayer(hostId, playerId) {
+		this.games[hostId].connectedPlayers.push(playerId);
+	}
+	removeConnectedPlayer(hostId, playerId) {
+		let players = this.games[hostId].connectedPlayers;
+		const index = players.indexOf(playerId);
+		if (index > -1) {
+			players.splice(index, 1);
+		}
+		this.games[hostId].connectedPlayers = players;
 	}
 }
 
