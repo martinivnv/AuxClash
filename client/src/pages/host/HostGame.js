@@ -91,21 +91,10 @@ const HostGame = () => {
 
 	useEffect(() => {
 		if (gameStage === 5) {
-			setPlayers((players) => players.sort(compareScores));
 			currentSocket.emit("game-over");
 			currentSocket.disconnect();
 		}
 	}, [gameStage]);
-
-	const compareScores = (a, b) => {
-		if (a.score > b.score) {
-			return -1;
-		}
-		if (a.score < b.score) {
-			return 1;
-		}
-		return 0;
-	};
 
 	const newRound = () => {
 		console.log(`new round: ${round}`);

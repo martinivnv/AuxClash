@@ -78,11 +78,13 @@ const Scoreboard = ({
 				style={{ backgroundColor: "#ffffff6e" }}
 			>
 				<ul>
-					{consolidatedVotes.map((s) => (
+					{consolidatedVotes.map((s, index) => (
 						<li key={s.songId} className="mb-4">
 							<div className="flex flex-row justify-between">
 								<div className="text-xl font-bold text-black">
-									{`${s.songTitle} --- ${s.numVotes} Votes`}
+									{`${index === 0 ? "👑" : "✅"} ${s.songTitle} --- ${
+										s.numVotes
+									} Votes`}
 								</div>
 								<div className="text-xl text-white">{`${s.playerName} --- ${s.oldScore} -> ${s.playerScore} pts`}</div>
 							</div>
