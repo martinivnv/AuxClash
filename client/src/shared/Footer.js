@@ -1,4 +1,4 @@
-import footerLogo from "../resources/martinivnv-logo-black.png";
+import footerLogo from "../resources/martinivnv-logo-seethru.png";
 import PrivacyPolicy from "../resources/Aux-Clash-Privacy-Policy-2023.pdf";
 
 const Footer = ({ showPrivacyPolicy }) => {
@@ -15,7 +15,7 @@ const Footer = ({ showPrivacyPolicy }) => {
 						alt="Logo"
 						width="35px"
 						height="35px"
-						className="mr-2 mix-blend-color-dodge"
+						className="mr-2"
 					/>
 				</a>
 				<div>© 2023 Martin Ivanov</div>
