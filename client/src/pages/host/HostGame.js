@@ -91,10 +91,21 @@ const HostGame = () => {
 
 	useEffect(() => {
 		if (gameStage === 5) {
+			setPlayers((players) => players.sort(compareScores));
 			currentSocket.emit("game-over");
 			currentSocket.disconnect();
 		}
 	}, [gameStage]);
+
+	const compareScores = (a, b) => {
+		if (a.score > b.score) {
+			return -1;
+		}
+		if (a.score < b.score) {
+			return 1;
+		}
+		return 0;
+	};
 
 	const newRound = () => {
 		console.log(`new round: ${round}`);
@@ -208,7 +219,7 @@ const HostGame = () => {
 					onEndRound={onEndRound}
 				/>
 			)}
-			{gameStage === 5 && <GameOver />}
+			{gameStage === 5 && <GameOver players={players} />}
 		</GameContainer>
 	);
 };
