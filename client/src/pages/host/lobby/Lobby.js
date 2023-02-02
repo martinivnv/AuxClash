@@ -58,15 +58,19 @@ const Lobby = () => {
 		<GameContainer showFooter={true}>
 			<div className="flex flex-row pt-16">
 				<div className="w-1/2">
-					<h3>Head to auxclash.com and enter the code below to join:</h3>
+					<h3>
+						Head to <span className="font-bold underline">auxclash.com</span>{" "}
+						and enter the code below to join:
+					</h3>
 					<p className="m-8 text-4xl font-bold">{lobbyCode}</p>
 					<br />
 					<button onClick={emitStartGame} disabled={players.length < 3}>
-						Begin the Game
+						Begin the Clash
 					</button>
-					<p className="m-8">
-						The game can't begin until at least 3 players have joined!
-					</p>
+					{players.length < 3 && (
+						<p className="m-8">Waiting for at least 3 people...</p>
+					)}
+					{players.length === 8 && <p className="m-8">The lobby is full!</p>}
 				</div>
 				<div className="w-1/2">
 					<h3>Aux Warriors:</h3>
