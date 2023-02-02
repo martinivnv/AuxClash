@@ -35,7 +35,7 @@ const Scoreboard = ({
 		const parsedVotes = submissions.map((s) => {
 			const matchingPlayer = players.find((p) => p.playerId === s.playerId);
 			const numVotes = votesPerSong[s.songId] || 0;
-			const oldScore = matchingPlayer.score;
+			const oldScore = matchingPlayer.score ? matchingPlayer.score : 0;
 			const newScore = oldScore + 1200 * numVotes;
 			newScores[s.playerId] = newScore;
 			return {
