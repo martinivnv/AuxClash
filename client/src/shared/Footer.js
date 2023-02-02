@@ -1,4 +1,4 @@
-import footerLogo from "../resources/martinivnv-logo.png";
+import footerLogo from "../resources/martinivnv-logo-black.png";
 import PrivacyPolicy from "../resources/Aux-Clash-Privacy-Policy-2023.pdf";
 
 const Footer = ({ showPrivacyPolicy }) => {
