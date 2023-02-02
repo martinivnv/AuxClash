@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import socketIOClient from "socket.io-client";
 import GameContainer from "../../shared/GameContainer";
-import GameOver from "../host/gameover/GameOver";
+import GameOver from "./gameover/GameOver";
 
 import Answer from "./answer/Answer";
 import Vote from "./vote/Vote";

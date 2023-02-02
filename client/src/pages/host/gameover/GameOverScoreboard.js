@@ -2,10 +2,10 @@ import React from "react";
 
 const GameOverScoreboard = ({ players }) => {
 	return (
-		<div className="ml-20 min-h-full w-3/4">
-			<h2 className="mb-2 text-4xl font-bold">Scoreboard</h2>
+		<div className="ml-20 h-full w-3/4">
+			<h2 className="mb-2 text-3xl font-bold">Scoreboard</h2>
 			<div
-				className="min-h-full rounded-md py-8 px-8 mix-blend-hard-light"
+				className="h-full rounded-md py-8 px-8 mix-blend-hard-light"
 				style={{ backgroundColor: "#ffffff6e" }}
 			>
 				<ul>
