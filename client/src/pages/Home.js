@@ -48,7 +48,7 @@ const Home = () => {
 
 				<p className="my-4">Or</p>
 				<SpotifyLogin buttonText={"Start a Lobby"} />
-				<Footer />
+				<Footer showPrivacyPolicy={true} />
 			</div>
 		</div>
 	);

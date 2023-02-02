@@ -2,7 +2,11 @@ import { Link } from "react-router-dom";
 import mainLogo from "../resources/white logo large.png";
 import Footer from "./Footer";
 
-const GameContainer = ({ children, showFooter = false }) => {
+const GameContainer = ({
+	children,
+	showFooter = false,
+	showPrivacyPolicy = false,
+}) => {
 	return (
 		<div>
 			<div className="w-1/2 sm:w-1/6">
@@ -15,7 +19,7 @@ const GameContainer = ({ children, showFooter = false }) => {
 				</Link>
 			</div>
 			{children}
-			{showFooter && <Footer />}
+			{showFooter && <Footer showPrivacyPolicy={showPrivacyPolicy} />}
 		</div>
 	);
 };
