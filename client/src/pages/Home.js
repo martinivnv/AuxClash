@@ -46,8 +46,14 @@ const Home = () => {
 					</Link>
 				</div>
 
-				<p className="my-4">Or</p>
-				<SpotifyLogin buttonText={"Start a Lobby"} />
+				<p className="my-4">~ Or ~</p>
+				<SpotifyLogin buttonText={"Start a Lobby *"} />
+				<div className="mt-3 flex justify-center">
+					<p className="w-3/4 text-sm">
+						* Starting a lobby requires a Spotify login, joining one doesn't.
+					</p>
+				</div>
+
 				<Footer showPrivacyPolicy={true} />
 			</div>
 		</div>
