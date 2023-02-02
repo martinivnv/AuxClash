@@ -27,7 +27,7 @@ const Footer = ({ showPrivacyPolicy }) => {
 						target="_blank"
 						rel="noreferrer"
 						onClick={onPrivacyPolicyClick}
-						className="underline"
+						className="cursor-pointer underline"
 					>
 						Privacy Policy
 					</a>
