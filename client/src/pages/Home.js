@@ -12,7 +12,11 @@ const Home = () => {
 
 	return (
 		<div className="flex h-screen flex-col items-center ">
-			<div className="h-16"></div>
+			<div className="flex w-full">
+				<button className="m-4 bg-neutral-400 py-2 px-4 text-2xl font-bold mix-blend-hard-light">
+					ⓘ
+				</button>
+			</div>
 			<img
 				src={mainLogo}
 				alt="auxClashLogo"
