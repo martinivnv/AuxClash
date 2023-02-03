@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import SpotifyLogin from "../shared/SpotifyLogin";
+import SpotifyLogin from "../../shared/SpotifyLogin";
 import axios from "axios";
-import "../css/global.css";
-import mainLogo from "../resources/white logo large.png";
-import Footer from "../shared/Footer";
+import "../../css/global.css";
+import mainLogo from "../../resources/white logo large.png";
+import Footer from "../../shared/Footer";
+import HelpModal from "./HelpModal";
 
 const Home = () => {
 	const [code, setCode] = useState("");
 	const [playerName, setPlayerName] = useState("");
+	const [modalIsOpen, setIsOpen] = useState(false);
 
 	return (
 		<div className="flex h-screen flex-col items-center ">
 			<div className="flex w-full">
-				<button className="m-4 bg-neutral-400 py-2 px-4 text-2xl font-bold mix-blend-hard-light">
+				<button
+					onClick={() => setIsOpen(true)}
+					className="m-4 bg-neutral-400 py-2 px-4 text-2xl font-bold mix-blend-hard-light"
+				>
 					ⓘ
 				</button>
 			</div>
+			<HelpModal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} />
 			<img
 				src={mainLogo}
 				alt="auxClashLogo"
@@ -53,7 +59,7 @@ const Home = () => {
 				<p className="my-4">~ Or ~</p>
 				<SpotifyLogin buttonText={"Start a Lobby *"} />
 				<div className="mt-3 flex justify-center">
-					<p className="w-3/4 text-sm">
+					<p className="invisible w-3/4 text-sm sm:visible">
 						* Starting a lobby requires a Spotify login, joining one doesn't.
 					</p>
 				</div>

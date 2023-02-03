@@ -22,15 +22,12 @@ const Footer = ({ showPrivacyPolicy }) => {
 			</div>
 			<div>
 				{showPrivacyPolicy && (
-					<a
-						href
-						target="_blank"
-						rel="noreferrer"
+					<button
 						onClick={onPrivacyPolicyClick}
-						className="cursor-pointer underline"
+						className="cursor-pointer bg-transparent p-0 text-base font-normal underline "
 					>
 						Privacy Policy
-					</a>
+					</button>
 				)}
 			</div>
 		</div>
