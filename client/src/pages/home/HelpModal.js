@@ -26,8 +26,8 @@ const HelpModal = ({ isOpen, onRequestClose }) => {
 				to the host's Spotify and one person is crowned the{" "}
 				<span className="font-bold">Aux Champion</span>
 				{"! "}
-				<span className="italic underline">
-					Aux Clash works for groups of 3 to 8.
+				<span className="italic text-rose-600">
+					Note that Aux Clash works for groups of 3 to 8.
 				</span>
 			</p>
 			<h2 className="mt-6 text-xl font-bold">How does it work?</h2>
@@ -44,6 +44,15 @@ const HelpModal = ({ isOpen, onRequestClose }) => {
 				<br /> Everyone else joins on their phones using the lobby code, no
 				Spotify account required. Once 3 to 8 friends have joined, the Aux Clash
 				can begin.
+			</p>
+			<p>
+				Questions?{" "}
+				<a
+					href="mailto:martinivnv2002@gmail.com"
+					className="text-sky-500 underline"
+				>
+					Contact us!
+				</a>
 			</p>
 		</Modal>
 	);
