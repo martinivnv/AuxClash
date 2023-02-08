@@ -56,7 +56,7 @@ const Home = () => {
 					</Link>
 				</div>
 
-				<p className="my-4">~ Or ~</p>
+				<p className="invisible my-4 sm:visible">~ Or ~</p>
 				<SpotifyLogin buttonText={"Start a Lobby *"} />
 				<div className="mt-3 flex justify-center">
 					<p className="invisible w-3/4 text-sm sm:visible">

@@ -39,7 +39,11 @@ const SpotifyLogin = ({ buttonText }) => {
 		return null;
 	}
 
-	return <button onClick={handleClick}>{buttonText}</button>;
+	return (
+		<button onClick={handleClick} className="invisible sm:visible">
+			{buttonText}
+		</button>
+	);
 };
 
 export default SpotifyLogin;
