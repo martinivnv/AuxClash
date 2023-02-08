@@ -14,7 +14,7 @@ exports.partyPrompts = [
 	"Play a song that everyone needs to know exists.",
 	"Name a song that you are playing on the beach this summer.",
 	"Play the song you would walk out to as a boxer.",
-	"Play a song you would kill a dance battle to.",
+	"Play a song that you would kill a dance battle to.",
 	"Play the song that would bring you back from the dead.",
 	"You just conquered the world. What’s the first song you play?",
 	"Name a song that represents your city.",

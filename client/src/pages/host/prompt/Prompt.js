@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import Players from "./Players";
 import Question from "./Question";
 import CountdownTimer from "../../../shared/CountdownTimer";
 import TVContainer from "../../../shared/TVContainer";
