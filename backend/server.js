@@ -2,6 +2,9 @@
 const { LiveGames } = require("./utils/liveGames");
 const { Players } = require("./utils/players");
 
+//Import questions
+const partyPrompts = require("./utils/prompts/partyPrompts").partyPrompts;
+
 // Import dependencies
 const express = require("express");
 const http = require("http");
@@ -143,22 +146,15 @@ io.on("connection", (socket) => {
 				livePlayers.updateHostId(connectedPlayers[i].playerId, socket.id);
 			}
 
-			socket.emit("game-questions", [
-				{
-					question:
-						"If they made a movie about your life, what song would be on the soundtrack?",
-					image: null,
-				},
-				{
-					question:
-						"Name the song you would play when going for a PR in the gym.",
-					image: null,
-				},
-				{
-					question: "Name a song that doesn't get enough love.",
-					image: null,
-				},
-			]);
+			// Shuffle array
+			const shuffledQuestions = [...partyPrompts].sort(
+				() => 0.5 - Math.random()
+			);
+
+			// Get sub-array of first n elements after shuffled
+			let selectedQuestions = shuffledQuestions.slice(0, 3);
+
+			socket.emit("game-questions", selectedQuestions);
 
 			socket.emit("update-host-on-connected-players", connectedPlayers);
 		} else {
