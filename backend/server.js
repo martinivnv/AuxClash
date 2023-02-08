@@ -145,7 +145,8 @@ io.on("connection", (socket) => {
 
 			socket.emit("game-questions", [
 				{
-					question: "Name a song that makes you feel like you are levitating.",
+					question:
+						"If they made a movie about your life, what song would be on the soundtrack?",
 					image: null,
 				},
 				{
@@ -173,20 +174,24 @@ io.on("connection", (socket) => {
 			if (!matchingGame.gameStarted) {
 				console.log(playerName, "joined");
 				var hostId = matchingGame.hostId; //Get the id of the host of game
+				if (liveGames.getConnectedPlayerIds(hostId).length < 8) {
+					livePlayers.addPlayer(hostId, socket.id, playerName, 0); //add player to game
 
-				livePlayers.addPlayer(hostId, socket.id, playerName, 0); //add player to game
+					socket.join(lobbyCode); //Player is joining room based on lobby code
+					liveGames.addConnectedPlayer(hostId, socket.id);
 
-				socket.join(lobbyCode); //Player is joining room based on lobby code
-				liveGames.addConnectedPlayer(hostId, socket.id);
+					const updatedPlayers = liveGames
+						.getConnectedPlayerIds(hostId)
+						.map((id) => livePlayers.getPlayer(id));
 
-				const updatedPlayers = liveGames
-					.getConnectedPlayerIds(hostId)
-					.map((id) => livePlayers.getPlayer(id));
-
-				io.to(lobbyCode).emit(
-					"update-host-on-connected-players",
-					updatedPlayers
-				); //Sending host player data to display
+					io.to(lobbyCode).emit(
+						"update-host-on-connected-players",
+						updatedPlayers
+					); //Sending host player data to display
+				} else {
+					// No game has been found
+					socket.emit("no-game-found");
+				}
 			} else {
 				// No game has been found
 				socket.emit("no-game-found");
