@@ -27,7 +27,10 @@ const PlaySubmissions = ({ submissions, onQueueFinished, question }) => {
 	return (
 		<div className="flex min-h-full flex-col items-center justify-around text-center">
 			<div className="flex basis-3/4 flex-col items-center justify-start text-center">
-				<div className="mb-6" style={{ display: "block", width: "600px" }}>
+				<div
+					className="mb-6 font-bold"
+					style={{ display: "block", width: "600px" }}
+				>
 					{question}
 				</div>
 				{showPlayer && (

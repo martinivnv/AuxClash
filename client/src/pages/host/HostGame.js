@@ -14,7 +14,7 @@ const HostGame = () => {
 	const lobbyCode = params.lobbyCode;
 	const [currentSocket, setCurrentSocket] = useState(null);
 	const [players, setPlayers] = useState([]);
-	const [questions, setQuestions] = useState([{ question: "", image: null }]);
+	const [questions, setQuestions] = useState([""]);
 	const [round, setRound] = useState(0);
 	const [gameStage, setGameStage] = useState(0);
 	const [submissions, setSubmissions] = useState([]);
@@ -194,7 +194,7 @@ const HostGame = () => {
 				<PlaySubmissions
 					submissions={submissions}
 					onQueueFinished={onQueueFinished}
-					question={questions[round - 1].question}
+					question={questions[round - 1]}
 				/>
 			)}
 			{gameStage === 3 && (
