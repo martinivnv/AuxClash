@@ -194,6 +194,7 @@ const HostGame = () => {
 				<PlaySubmissions
 					submissions={submissions}
 					onQueueFinished={onQueueFinished}
+					question={questions[round - 1].question}
 				/>
 			)}
 			{gameStage === 3 && (

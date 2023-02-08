@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SpotifyPlayer from "./SpotifyPlayer";
 
-const PlaySubmissions = ({ submissions, onQueueFinished }) => {
+const PlaySubmissions = ({ submissions, onQueueFinished, question }) => {
 	const [queueFinished, setQueueFinished] = useState(false);
 	const [currentSong, setCurrentSong] = useState(-1);
 	const [showPlayer, setShowPlayer] = useState(false);
@@ -27,16 +27,19 @@ const PlaySubmissions = ({ submissions, onQueueFinished }) => {
 	return (
 		<div className="flex min-h-full flex-col items-center justify-around text-center">
 			<div className="flex basis-3/4 flex-col items-center justify-start text-center">
-				{showPlayer ? (
+				<div className="mb-6" style={{ display: "block", width: "600px" }}>
+					{question}
+				</div>
+				{showPlayer && (
 					<SpotifyPlayer trackId={submissions[currentSong].songId} />
-				) : (
-					<div style={{ display: "block", width: "500px", height: "400px" }}>
-						Time to listen to the submissions!
-					</div>
 				)}
 			</div>
 			<div className="basis-1/4">
-				{!queueFinished ? <button onClick={playNext}>Play next</button> : null}
+				{!queueFinished ? (
+					<button onClick={playNext}>
+						{currentSong === -1 ? "Play Submissions" : "Play Next"}
+					</button>
+				) : null}
 			</div>
 		</div>
 	);
