@@ -82,11 +82,11 @@ const Scoreboard = ({
 						<li key={s.songId} className="mb-4">
 							<div className="flex flex-row justify-between">
 								<div className="text-xl font-bold text-black">
-									{`${index === 0 ? "👑" : "✅"} ${s.songTitle} --- ${
+									{`${index === 0 ? "👑" : "✅"} ${s.songTitle} — ${
 										s.numVotes
 									} Votes`}
 								</div>
-								<div className="text-xl text-white">{`${s.playerName} --- ${s.oldScore} -> ${s.playerScore} pts`}</div>
+								<div className="text-xl text-white">{`${s.playerName} — ${s.oldScore} ➜ ${s.playerScore} pts`}</div>
 							</div>
 						</li>
 					))}
