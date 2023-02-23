@@ -94,10 +94,12 @@ io.on("connection", (socket) => {
 	socket.on("host-start-lobby", (data) => {
 		console.log(data);
 		// Generate lobby code
-		const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		const characters = "ABCDEFHJKLMNPQRSTVWXYZ123456789";
 		let lobbyCode = "";
 		for (var i = 0; i < 6; i++) {
-			lobbyCode += characters.charAt(Math.floor(Math.random() * 36));
+			lobbyCode += characters.charAt(
+				Math.floor(Math.random() * characters.length)
+			);
 		}
 
 		liveGames.addGame(
