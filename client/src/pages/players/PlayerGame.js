@@ -35,11 +35,19 @@ const PlayerGame = () => {
 		});
 
 		socket.on("no-game-found", () => {
+			window.alert(
+				"This lobby does not exist or is full, you will be redirected to the home page."
+			);
 			navigate("/");
 		});
 
 		socket.on("host-disconnect", () => {
-			navigate("/");
+			if (gameStage !== 5) {
+				window.alert(
+					"The host has disconnected, you will be redirected to the home page."
+				);
+				navigate("/");
+			}
 		});
 
 		socket.on("songs-found", ({ hostId, submissions }) => {
