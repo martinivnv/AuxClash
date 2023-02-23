@@ -78,7 +78,11 @@ const HostGame = () => {
 	}, [round]);
 
 	useEffect(() => {
-		if (submissions.length >= players.length && players.length > 0) {
+		if (
+			submissions.length >= players.length &&
+			players.length > 0 &&
+			gameStage === 1
+		) {
 			stageReducer("SubmissionsDone");
 		}
 	}, [players, submissions]);

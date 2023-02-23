@@ -25,7 +25,9 @@ const GameOverScoreboard = ({ players }) => {
 								<div className="text-2xl font-bold text-black">
 									{`${index === 0 ? "👑" : "✅"} ${p.playerName}`}
 								</div>
-								<div className="text-2xl text-white">{`${p.score}`}</div>
+								<div className="text-2xl text-white">{`${
+									p.score ? p.score : 0
+								}`}</div>
 							</div>
 						</li>
 					))}

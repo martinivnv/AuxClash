@@ -77,20 +77,26 @@ const Scoreboard = ({
 				className="mx-40 min-h-full rounded-md py-8 px-8 mix-blend-hard-light"
 				style={{ backgroundColor: "#ffffff6e" }}
 			>
-				<ul>
-					{consolidatedVotes.map((s, index) => (
-						<li key={s.songId} className="mb-4">
-							<div className="flex flex-row justify-between">
-								<div className="text-xl font-bold text-black">
-									{`${index === 0 ? "👑" : "✅"} ${s.songTitle} — ${
-										s.numVotes
-									} Votes`}
+				{consolidatedVotes.length > 0 ? (
+					<ul>
+						{consolidatedVotes.map((s, index) => (
+							<li key={s.songId} className="mb-4">
+								<div className="flex flex-row justify-between">
+									<div className="text-xl font-bold text-black">
+										{`${index === 0 ? "👑" : "✅"} ${s.songTitle} — ${
+											s.numVotes
+										} Votes`}
+									</div>
+									<div className="text-xl text-white">{`${s.playerName} — ${s.oldScore} ➜ ${s.playerScore} pts`}</div>
 								</div>
-								<div className="text-xl text-white">{`${s.playerName} — ${s.oldScore} ➜ ${s.playerScore} pts`}</div>
-							</div>
-						</li>
-					))}
-				</ul>
+							</li>
+						))}
+					</ul>
+				) : (
+					<span className="font-bold text-black">
+						No one submitted and/or voted this round!
+					</span>
+				)}
 			</div>
 			<button onClick={onEndRound} className="mt-4 text-2xl">
 				End Round
