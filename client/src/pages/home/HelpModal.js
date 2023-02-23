@@ -28,7 +28,7 @@ const HelpModal = ({ isOpen, onRequestClose }) => {
 				friends and create the ultimate playlist! <br /> <br /> Given a prompt
 				like{" "}
 				<span className="italic">"Name a song that gives you goosebumps"</span>,
-				everyone has 90 seconds to submit a song. The songs are played, then
+				everyone has 2 minutes to submit a song. The songs are played, then
 				everyone has 90 seconds to vote on the best pick. <br /> <br />
 				At the end of 3 rounds, all of the songs are{" "}
 				<span className="font-bold">

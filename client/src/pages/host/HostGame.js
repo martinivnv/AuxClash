@@ -19,7 +19,8 @@ const HostGame = () => {
 	const [gameStage, setGameStage] = useState(0);
 	const [submissions, setSubmissions] = useState([]);
 	const [votes, setVotes] = useState([]);
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = window.localStorage.getItem("access_token");
+	const [allSubmissions, setAllSubmissions] = useState([]);
 
 	useEffect(() => {
 		const socket = socketIOClient(process.env.REACT_APP_SERVER_URL);
@@ -157,6 +158,11 @@ const HostGame = () => {
 				break;
 			case "EndRound":
 				// If current round is same as number of questions, game over
+				setAllSubmissions((oldAllSubmissions) => [
+					...oldAllSubmissions,
+					{ prompt: questions[round], submissions: submissions },
+				]);
+				console.log(allSubmissions);
 				if (round === questions.length) {
 					setGameStage(5);
 				} else {
@@ -213,7 +219,9 @@ const HostGame = () => {
 					onEndRound={onEndRound}
 				/>
 			)}
-			{gameStage === 5 && <GameOver players={players} />}
+			{gameStage === 5 && (
+				<GameOver players={players} allSubmissions={allSubmissions} />
+			)}
 		</GameContainer>
 	);
 };
