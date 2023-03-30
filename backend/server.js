@@ -8,8 +8,6 @@ const partyPrompts = require("./utils/prompts/partyPrompts").partyPrompts;
 // Import dependencies
 const express = require("express");
 const http = require("http");
-const mongoose = require("mongoose");
-const path = require("path");
 const socketIO = require("socket.io");
 const querystring = require("querystring");
 const cors = require("cors");
@@ -48,15 +46,32 @@ server.listen(port, () => {
 });
 
 // Spotify Login =================================================================
+const generateRandomState = (length) => {
+	let result = "";
+	const characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	const charactersLength = characters.length;
+	let counter = 0;
+	while (counter < length) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		counter += 1;
+	}
+	return result;
+};
 
 const spotify_redirect_uri = `${process.env.APP_URL}/callback`;
 
 app.get("/api/spotify-login", (req, res) => {
+	const scope =
+		"playlist-modify-public playlist-modify-private user-read-email user-read-private";
+	const state = generateRandomState(16);
 	const authorizeUrl =
 		"https://accounts.spotify.com/authorize?" +
 		querystring.stringify({
 			response_type: "code",
 			client_id: process.env.SPOTIFY_CLIENT_ID,
+			state: state,
+			scope: scope,
 			redirect_uri: spotify_redirect_uri,
 		});
 	res.json({ authorizationUrl: authorizeUrl });
@@ -69,7 +84,7 @@ app.get("/api/callback", async (req, res) => {
 			method: "post",
 			url: "https://accounts.spotify.com/api/token",
 			data: querystring.stringify({
-				grant_type: "client_credentials",
+				grant_type: "authorization_code",
 				code,
 				redirect_uri: spotify_redirect_uri,
 			}),
@@ -84,6 +99,85 @@ app.get("/api/callback", async (req, res) => {
 	} catch (e) {
 		res.status(500).send(e);
 		console.log(e);
+	}
+});
+
+// Create Spotify playlist =======================================================
+app.use(express.json());
+
+const generatePlaylistTitle = () => {
+	let date_ob = new Date();
+	let date = ("0" + date_ob.getDate()).slice(-2);
+	let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+	let year = date_ob.getFullYear();
+	let hours = date_ob.getHours();
+	let minutes = date_ob.getMinutes();
+
+	return (
+		"Aux Clash " + year + "-" + month + "-" + date + " " + hours + ":" + minutes
+	);
+};
+
+app.post("/api/create-spotify-playlist", async (req, res) => {
+	try {
+		// Get the access token from the request header
+		const accessToken = req.body.accessToken;
+
+		// Define the playlist name and description
+		const playlistName = generatePlaylistTitle();
+		const playlistDescription = "A playlist created with Aux Clash!";
+
+		// Define the list of track IDs to add to the playlist
+		const trackIds = req.body.trackIds;
+
+		//	Get user id
+		const getUserId = await axios({
+			method: "get",
+			url: `https://api.spotify.com/v1/me`,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+		const userId = getUserId.data.id;
+
+		// Create the playlist
+		const createPlaylistResponse = await axios({
+			method: "post",
+			url: `https://api.spotify.com/v1/users/${userId}/playlists`,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+			data: JSON.stringify({
+				name: playlistName,
+				description: playlistDescription,
+				public: false,
+			}),
+		});
+
+		// Get the ID of the newly created playlist
+		const playlistId = createPlaylistResponse.data.id;
+
+		// Add tracks to the playlist
+		const addTracksResponse = await axios({
+			method: "post",
+			url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+			data: JSON.stringify({
+				uris: trackIds.map((id) => `spotify:track:${id}`),
+			}),
+		});
+
+		// Send a response indicating success
+		res.status(200).send("Playlist created successfully!");
+	} catch (e) {
+		// Send a response indicating failure
+		console.error(e);
+		res.status(500).send("Error creating playlist");
 	}
 });
 
@@ -288,6 +382,7 @@ io.on("connection", (socket) => {
 						songArtist: response.data.tracks.items[0].artists[0].name,
 						songTitle: response.data.tracks.items[0].name,
 						songId: response.data.tracks.items[0].id,
+						thumbnail: response.data.tracks.items[0].album.images[2],
 						playerId: submissions[i].playerId,
 					});
 				} catch (error) {
@@ -317,13 +412,13 @@ io.on("connection", (socket) => {
 		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
 		//If a game hosted by that id is found, the socket disconnected is a host
 		if (game) {
-			liveGames.removeGame(socket.id); //Remove the game from games class
 			console.log("Game ended with code:", game.lobbyCode);
 
 			const playersToRemove = liveGames.getConnectedPlayerIds(game.hostId); //Getting all players in the game
 
 			playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
 
+			liveGames.removeGame(socket.id); //Remove the game from games class
 			socket.leave(game.lobbyCode); //Socket is leaving room
 		}
 	});
