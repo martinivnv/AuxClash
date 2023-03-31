@@ -35,6 +35,7 @@ const Home = () => {
 						placeholder="Enter your name..."
 						value={playerName}
 						onChange={(e) => setPlayerName(e.target.value)}
+						maxLength={10}
 					/>
 					<input
 						type="text"
