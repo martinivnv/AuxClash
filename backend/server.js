@@ -186,7 +186,6 @@ app.post("/api/create-spotify-playlist", async (req, res) => {
 io.on("connection", (socket) => {
 	// When host starts a lobby
 	socket.on("host-start-lobby", (data) => {
-		console.log(data);
 		// Generate lobby code
 		const characters = "ABCDEFHJKLMNPQRSTVWXYZ123456789";
 		let lobbyCode = "";
@@ -211,14 +210,10 @@ io.on("connection", (socket) => {
 
 		socket.join(lobbyCode);
 
-		console.log(livePlayers);
-		console.log(liveGames);
-
 		socket.emit("show-lobby-code", { lobbyCode: lobbyCode, hostId: socket.id });
 	});
 
 	socket.on("host-start-game", ({ category, hostId }) => {
-		console.log("host-start-game received");
 		var game = liveGames.getGameByHostId(hostId); // Get the game based on socket.id
 		game.gameStarted = true;
 		game.gameData.category = category;
@@ -227,7 +222,6 @@ io.on("connection", (socket) => {
 
 	// When host joins game
 	socket.on("host-join-game", ({ lobbyCode }) => {
-		console.log("host-join-game receieved");
 		var game = liveGames.getGameByLobbyCode(lobbyCode); //Gets game with old host id
 		if (game) {
 			const oldHostId = game.hostId;
@@ -299,11 +293,8 @@ io.on("connection", (socket) => {
 		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
 		//If a game hosted by that id is found, the socket disconnected is a host
 		if (game) {
-			console.log(game);
 			//Checking to see if host was disconnected or was sent to game view
 			if (game.gameStarted == false || game.gameLive == true) {
-				console.log("Game ended with code:", game.lobbyCode);
-
 				let playersToRemove = liveGames.getConnectedPlayerIds(socket.id); //Getting all players in the game
 
 				playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class
@@ -318,7 +309,6 @@ io.on("connection", (socket) => {
 			let player = livePlayers.getPlayer(socket.id); //Getting player with socket.id
 			//If a player has been found with that id
 			if (player) {
-				console.log("Player leaving named:", player.playerName);
 				let hostId = player.hostId; //Gets id of host of the game
 				game = liveGames.getGameByHostId(hostId); //Gets game data with hostId
 				if (game) {
@@ -412,8 +402,6 @@ io.on("connection", (socket) => {
 		let game = liveGames.getGameByHostId(socket.id); //Finding game with socket.id
 		//If a game hosted by that id is found, the socket disconnected is a host
 		if (game) {
-			console.log("Game ended with code:", game.lobbyCode);
-
 			const playersToRemove = liveGames.getConnectedPlayerIds(game.hostId); //Getting all players in the game
 
 			playersToRemove.map((p) => livePlayers.removePlayer(p.playerId)); //Removing each player from player class

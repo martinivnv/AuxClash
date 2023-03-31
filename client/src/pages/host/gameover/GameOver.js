@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import GameOverScoreboard from "./GameOverScoreboard";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const GameOver = ({ players, allSubmissions }) => {
 	const [trackIds, setTrackIds] = useState();
@@ -10,6 +10,10 @@ const GameOver = ({ players, allSubmissions }) => {
 	const accessToken = window.localStorage.getItem("access_token");
 
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		extractTrackIds();
+	}, []);
 
 	const extractTrackIds = () => {
 		let extractedIds = [];
@@ -25,9 +29,6 @@ const GameOver = ({ players, allSubmissions }) => {
 	};
 
 	const createPlaylist = async () => {
-		if (!trackIds) {
-			extractTrackIds();
-		}
 		try {
 			setLoading(true);
 			const response = await axios.post(
