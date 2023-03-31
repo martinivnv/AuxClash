@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import SpotifyLogin from "../../shared/SpotifyLogin";
-import axios from "axios";
 import "../../css/global.css";
 import mainLogo from "../../resources/white logo large.png";
 import Footer from "../../shared/Footer";

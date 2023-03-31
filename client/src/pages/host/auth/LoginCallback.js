@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import GameContainer from "../../../shared/GameContainer";
