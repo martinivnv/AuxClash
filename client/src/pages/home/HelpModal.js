@@ -25,7 +25,7 @@ const HelpModal = ({ isOpen, onRequestClose }) => {
 			<br />
 			<p>
 				Aux Clash is not a game, it's the easiest way to aux battle with your
-				friends and create the ultimate playlist! <br /> <br /> Given a prompt
+				friends to create the ultimate playlist! <br /> <br /> Given a prompt
 				like{" "}
 				<span className="italic">"Name a song that gives you goosebumps"</span>,
 				everyone has 2 minutes to submit a song. The songs are played, then

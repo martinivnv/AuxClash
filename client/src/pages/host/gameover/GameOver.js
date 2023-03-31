@@ -64,7 +64,11 @@ const GameOver = ({ players, allSubmissions }) => {
 						) : loading ? (
 							<p className="my-6 text-xl font-bold">Creating playlist...</p>
 						) : (
-							<button onClick={createPlaylist} className="my-6">
+							<button
+								onClick={createPlaylist}
+								className="my-6"
+								style={{ backgroundColor: "#1DB954" }}
+							>
 								Create Playlist
 							</button>
 						)}
