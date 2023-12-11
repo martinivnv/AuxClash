@@ -137,9 +137,9 @@ Since AuxClash is built using Spotify's API, users must be manually added to con
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Aux Clash is designed for music enthusiasts who want a fun and interactive way to create playlists with their friends. It's not a game but a social music experience. We've made it easy for users to aux battle by responding to prompts, submitting songs within a time limit, and voting on the best picks. The end result is a collaborative playlist crowned by an Aux Champion.
+Aux Clash is designed for music enthusiasts who want a fun and interactive way to create playlists with their friends. It's not a game but a social music experience. We've made it easy for users to aux battle by responding to prompts, submitting songs within a time limit, and voting on the best picks. The end result is a collaborative playlist, and a user is crowned the Aux Monarch.
 
-To integrate with Spotify, the host signs in to our Spotify account to initiate a lobby, where participants can join using a unique code. We leverage Spotify's capabilities to play submitted songs, and the compiled playlist can be saved to the host's Spotify account. It's worth noting that Spotify Premium is required to play songs in their entirety, but the trial version works for shorter snippets.
+To integrate with Spotify, the host signs in to their Spotify account to initiate a lobby, where participants can join using a unique code. We leverage Spotify's capabilities to play submitted songs, and the compiled playlist can be saved to the host's Spotify account. It's worth noting that Spotify Premium is required to play songs in their entirety, but the trial version works for shorter snippets.
 
 ### Built With
 
